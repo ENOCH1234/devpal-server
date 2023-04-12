@@ -31,9 +31,9 @@ app.post("/webhooks", (req, res) => {
     req.query["hub.mode"] == "subscribe" &&
     req.query["hub.verify_token"] == "THEFACE"
   ) {
+    res.send(req.query["hub.challenge"]);
     console.log("The Req", req);
     console.log("The Message", req.messages.text.body);
-    res.send(req.query["hub.challenge"]);
   } else {
     console.log("not recognized");
     res.sendStatus(400);
