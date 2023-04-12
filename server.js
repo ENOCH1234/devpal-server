@@ -26,16 +26,17 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.get("/webhooks", (req, res) => {
-  if (
-    req.query["hub.mode"] == "subscribe" &&
-    req.query["hub.verify_token"] == "THEFACE"
-  ) {
-    res.send(req.query["hub.challenge"]);
-  } else {
-    console.log("not recognized");
-    res.sendStatus(400);
+app.post("/webhooks", (req, res) => {
+  const body = JSON.parse(req.body);
+  if (body.field !== "messages") {
+    // not from the messages webhook so dont process
+    return res.sendStatus(400);
   }
+  const messsage = body.messages.text.body;
+  console.log(message);
+  return res.status(200).send({
+    response: "okay",
+  });
 });
 
 app.post("/webhook", (req, res) => {
