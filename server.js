@@ -32,7 +32,7 @@ app.post("/webhooks", (req, res) => {
     // not from the messages webhook so dont process
     return res.sendStatus(400);
   }
-  const messsage = body.messages.text.body;
+  const message = body.messages.text.body;
   console.log(message);
   return res.status(200).send({
     response: "okay",
