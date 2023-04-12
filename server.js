@@ -31,7 +31,7 @@ app.get("/webhooks", (req, res) => {
     req.query["hub.mode"] == "subscribe" &&
     req.query["hub.verify_token"] == "THEFACE"
   ) {
-    console.log(req);
+    console.log("The Req", req);
     res.send(req.query["hub.challenge"]);
   } else {
     res.sendStatus(400);
