@@ -26,7 +26,7 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.post("/webhook", (req, res) => {
+app.post("/webhooks", (req, res) => {
   if (
     req.query["hub.mode"] == "subscribe" &&
     req.query["hub.verify_token"] == "THEFACE"
