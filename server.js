@@ -38,6 +38,18 @@ app.get("/webhooks", (req, res) => {
   }
 });
 
+app.post("/webhook", (req, res) => {
+  if (
+    req.query["hub.mode"] == "subscribe" &&
+    req.query["hub.verify_token"] == "THEFACE"
+  ) {
+    res.send(req.query["hub.challenge"]);
+  } else {
+    console.log("not recognized");
+    res.sendStatus(400);
+  }
+});
+
 app.post("/all", async (req, res) => {
   try {
     const prompt = req.body.prompt;
