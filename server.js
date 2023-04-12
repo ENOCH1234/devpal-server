@@ -13,11 +13,11 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const app = express();
-// app.use(
-//   cors({
-//     origin: "https://devspal.web.app",
-//   })
-// );
+app.use(
+  cors({
+    origin: "https://devspal.web.app",
+  })
+);
 app.use(express.json());
 
 app.get("/", async (req, res) => {
@@ -26,14 +26,12 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.post("/webhooks", (req, res) => {
+app.get("/webhooks", (req, res) => {
   if (
     req.query["hub.mode"] == "subscribe" &&
     req.query["hub.verify_token"] == "THEFACE"
   ) {
     res.send(req.query["hub.challenge"]);
-    console.log("The Req", req);
-    console.log("The Message", req.messages.text.body);
   } else {
     console.log("not recognized");
     res.sendStatus(400);
