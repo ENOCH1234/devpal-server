@@ -32,8 +32,10 @@ app.get("/webhooks", (req, res) => {
     req.query["hub.verify_token"] == "THEFACE"
   ) {
     console.log("The Req", req);
+    console.log("The Message", req.messages.text.body);
     res.send(req.query["hub.challenge"]);
   } else {
+    console.log("not recognized");
     res.sendStatus(400);
   }
 });
