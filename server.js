@@ -27,8 +27,6 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/webhooks", (req, res) => {
-  console.log(req.body);
-
   const body = req.body;
   const values = body.entry[0].changes[0].value;
   const sender = values.contacts[0];
@@ -37,7 +35,7 @@ app.post("/webhooks", (req, res) => {
   console.log(sender);
   console.log(message);
 
-  if (body.field !== "messages") {
+  if (body.entry[0].changes[0].field !== "messages") {
     // not from the messages webhook so dont process
     return res.sendStatus(400);
   }
