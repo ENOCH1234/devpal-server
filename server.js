@@ -2,6 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
+const { WhatsApp } = require("facebook-nodejs-business-sdk");
 
 dotenv.config();
 
@@ -9,8 +10,6 @@ const configuration = new Configuration({
   //   apiKey: process.env.OPENAI_API_KEY
   apiKey: "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",
 });
-
-const { WhatsApp } = require("facebook-nodejs-business-sdk");
 
 const openai = new OpenAIApi(configuration);
 
