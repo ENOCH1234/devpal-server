@@ -32,7 +32,9 @@ app.post("/webhooks", (req, res) => {
   const body = req.body;
   const entries = body.entry;
   // console.log(entries);
-  const changes = entries.changes;
+  const entry = entries.find((item) => item);
+  const changes = entry.changes;
+
   console.log(changes);
   // const allChanges = changes.find((item) => item);
   const message = changes.messages;
