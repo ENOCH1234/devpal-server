@@ -32,10 +32,10 @@ app.post("/webhooks", (req, res) => {
   const body = req.body;
   const entries = body.entry;
   console.log(entries);
-  if (body.field !== "messages") {
-    // not from the messages webhook so dont process
-    return res.sendStatus(400);
-  }
+  // if (body.field !== "messages") {
+  //   // not from the messages webhook so dont process
+  //   return res.sendStatus(400);
+  // }
   // const message = body.messages.text.body;
   // console.log(message);
 
@@ -47,12 +47,14 @@ app.post("/webhooks", (req, res) => {
   });
 
   // Your code to handle the incoming message goes here
-  // const message = req.body.messages;
-  const message = body.messages.map((item) => item.text.body);
+  const changes = entries.find((item) => item.changes);
+  const allChanges = changes.find((item) => item);
+  const allMessages = allChanges.find((item) => item.messages);
+  const message = allMessages.find((item) => item);
   // const senderId = message.sender.id;
-  const senderId = body.contacts.find((item) => item.wa_id);
+  const senderId = message.id;
   console.log("Sender", senderId);
-  console.log("Message", message);
+  console.log("Message", message.text.body);
 
   // Send a text message back to the user
   client
