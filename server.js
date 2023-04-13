@@ -36,7 +36,8 @@ app.post("/webhooks", (req, res) => {
   const changes = entry.changes;
 
   console.log(changes);
-  const allMessages = changes.find((item) => item.messages);
+  const value = changes.find((item) => item.value);
+  const allMessages = value.messages;
   // const allMessage = allMessages.messages;
   console.log(allMessages);
   const message = allMessages.find((item) => item);
