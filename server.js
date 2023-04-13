@@ -47,8 +47,11 @@ app.post("/webhooks", (req, res) => {
   });
 
   // Your code to handle the incoming message goes here
-  const message = req.body.messages;
-  const senderId = message.sender.id;
+  // const message = req.body.messages;
+  const message = body.messages.map((item) => item.text.body);
+  // const senderId = message.sender.id;
+  const senderId = body.contacts.find((item) => item.wa_id);
+  console.log("Sender", senderId);
   console.log("Message", message);
 
   // Send a text message back to the user
