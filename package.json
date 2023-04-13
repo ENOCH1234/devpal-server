@@ -16,5 +16,8 @@
   "type": "module",
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/facebook-nodejs-business-sdk": "^15.0.2"
+  }
 }
