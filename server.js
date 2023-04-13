@@ -10,6 +10,8 @@ const configuration = new Configuration({
   apiKey: "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",
 });
 
+const { WhatsApp } = require("facebook-nodejs-business-sdk");
+
 const openai = new OpenAIApi(configuration);
 
 const app = express();
@@ -40,7 +42,6 @@ app.post("/webhooks", (req, res) => {
     return res.sendStatus(400);
   }
 
-  const { WhatsApp } = require("facebook-nodejs-business-sdk");
   const client = new WhatsApp({
     accessToken: "751950662807306|txixsDwdHi4gKgYoKbODvDy4zhs",
   });
