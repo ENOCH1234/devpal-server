@@ -30,29 +30,17 @@ app.post("/webhooks", (req, res) => {
   console.log(req.body);
 
   const body = req.body;
-  const entries = body.entry;
-  // console.log(entries);
-  const entry = entries.find((item) => item);
-  const changes = entry.changes;
+  const values = body.entry[0].changes[0].value;
+  const sender = values.contacts[0];
+  const message = values.messages[0];
 
-  console.log(changes);
-  const value = changes.find((item) => item.value);
-  const allMessages = value.messages;
-  // const allMessage = allMessages.messages;
-  console.log(allMessages);
-  const message = allMessages.find((item) => item);
-  // const senderId = message.sender.id;
-  const senderId = message.id;
-  console.log("Sender", senderId);
-  console.log("Message", message.text.body);
-  // if (body.field !== "messages") {
-  //   // not from the messages webhook so dont process
-  //   return res.sendStatus(400);
-  // }
-  // const message = body.messages.text.body;
-  // console.log(message);
+  console.log(sender);
+  console.log(message);
 
-  // const sender = body.messages;
+  if (body.field !== "messages") {
+    // not from the messages webhook so dont process
+    return res.sendStatus(400);
+  }
 
   const { WhatsApp } = require("facebook-nodejs-business-sdk");
   const client = new WhatsApp({
@@ -60,7 +48,7 @@ app.post("/webhooks", (req, res) => {
   });
 
   // Your code to handle the incoming message goes here
-
+  const senderId = message.id;
   // Send a text message back to the user
   client
     .sendMessage(senderId, {
