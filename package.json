@@ -13,7 +13,7 @@
   },
   "name": "server",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "author": "",
   "license": "ISC",
   "description": "",
