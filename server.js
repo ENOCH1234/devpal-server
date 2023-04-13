@@ -3,6 +3,11 @@ import * as dotenv from "dotenv";
 import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
 
+const { WhatsApp } = require("facebook-nodejs-business-sdk");
+const client = new WhatsApp({
+  accessToken: "THEFACE",
+});
+
 dotenv.config();
 
 const configuration = new Configuration({
@@ -36,11 +41,24 @@ app.post("/webhooks", (req, res) => {
     // not from the messages webhook so dont process
     return res.sendStatus(400);
   }
-  const message = body.messages.text.body;
-  console.log(message);
-  return res.status(200).send({
-    response: "okay",
-  });
+  // const message = body.messages.text.body;
+  // console.log(message);
+
+  // Your code to handle the incoming message goes here
+  // const message = req.body.message;
+  // const senderId = message.sender.id;
+
+  // Send a text message back to the user
+  client
+    .sendMessage(senderId, {
+      text: "Hello, World!",
+    })
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 app.post("/webhook", (req, res) => {
