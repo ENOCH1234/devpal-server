@@ -2,11 +2,6 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
-import { WhatsApp } from "facebook-nodejs-business-sdk";
-
-const client = new WhatsApp({
-  accessToken: "THEFACE",
-});
 
 dotenv.config();
 
@@ -35,8 +30,8 @@ app.post("/webhooks", (req, res) => {
   console.log(req.body);
 
   const body = req.body;
-  const entry = body.entry;
-  console.log(entry);
+  const entries = body.entry;
+  console.log(entries);
   if (body.field !== "messages") {
     // not from the messages webhook so dont process
     return res.sendStatus(400);
@@ -44,9 +39,17 @@ app.post("/webhooks", (req, res) => {
   // const message = body.messages.text.body;
   // console.log(message);
 
+  // const sender = body.messages;
+
+  const { WhatsApp } = require("facebook-nodejs-business-sdk");
+  const client = new WhatsApp({
+    accessToken: "751950662807306|txixsDwdHi4gKgYoKbODvDy4zhs",
+  });
+
   // Your code to handle the incoming message goes here
-  // const message = req.body.message;
-  // const senderId = message.sender.id;
+  const message = req.body.messages;
+  const senderId = message.sender.id;
+  console.log("Message", message);
 
   // Send a text message back to the user
   client
