@@ -28,7 +28,9 @@ app.get("/", async (req, res) => {
 
 app.post("/webhooks", (req, res) => {
   console.log(req.body);
-  const body = req;
+
+  const body = req.body;
+  body.entry.map((item) => (item === "messages" ? console.log(item) : null));
   if (body.field !== "messages") {
     // not from the messages webhook so dont process
     return res.sendStatus(400);
