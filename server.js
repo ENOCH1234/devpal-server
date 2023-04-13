@@ -32,11 +32,12 @@ app.post("/webhooks", (req, res) => {
   const body = req.body;
   const entries = body.entry;
   // console.log(entries);
-  const changes = entries.find((item) => item.changes);
+  const changes = entries.changes;
   console.log(changes);
   // const allChanges = changes.find((item) => item);
-  const allMessages = changes.messages;
-  const message = allMessages.find((item) => item);
+  const message = changes.messages;
+  console.log(allMessages);
+  // const message = allMessages.find((item) => item);
   // const senderId = message.sender.id;
   const senderId = message.id;
   console.log("Sender", senderId);
