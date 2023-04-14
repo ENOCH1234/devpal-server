@@ -2,7 +2,6 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
-import WhatsApp from "facebook-nodejs-business-sdk";
 import WhatsappCloudAPI from "whatsappcloudapi_wrapper";
 
 dotenv.config();
@@ -46,13 +45,17 @@ app.post("/webhooks", async (req, res) => {
     accessToken: "751950662807306|txixsDwdHi4gKgYoKbODvDy4zhs",
     senderPhoneNumberId: values.metadata.phone_number_id,
     WABA_ID: body.entry[0].id,
-    graphAPIVersion: "v14.0",
+    graphAPIVersion: "v16.0",
   });
 
-  await WhatsApp.sendText({
-    message: "Hello, World",
-    recipientPhone: sender.wa_id,
-  });
+  try {
+    await WhatsApp.sendText({
+      message: "Hello, World",
+      recipientPhone: sender.wa_id,
+    });
+  } catch (error) {
+    console.log("Error occured", error);
+  }
 
   // Your code to handle the incoming message goes here
   // const senderId = sender.wa_id;
