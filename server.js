@@ -49,20 +49,26 @@ app.post("/webhooks", async (req, res) => {
     graphAPIVersion: "v16.0",
   });
 
-  try {
-    await WhatsApp.sendText({
-      message: "Hello, World",
-      recipientPhone: sender.wa_id,
+  await WhatsApp.sendSimpleButtons({
+    message: `Hey ${sender.profile.name}, \nYou are speaking to a chatbot.\nWhat do you want to do next?`,
+    recipientPhone: sender.wa_id,
+    listOfButtons: [
+      {
+        title: "Chat The Face",
+        id: "see_categories",
+      },
+      {
+        title: "Call ZeekCodes",
+        id: "speak_to_human",
+      },
+    ],
+  })
+    .then((result) => {
+      console.log(result);
     })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  } catch (error) {
-    console.log("Error occured", error);
-  }
+    .catch((error) => {
+      console.error(error);
+    });
 
   // Your code to handle the incoming message goes here
   // const senderId = sender.wa_id;
