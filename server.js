@@ -33,7 +33,7 @@ app.post("/webhooks", async (req, res) => {
   const sender = values.contacts[0];
   const message = values.messages[0];
 
-  console.log("See", body.object);
+  console.log("See", body.entry[0].id);
   console.log(sender);
   console.log(message);
 
