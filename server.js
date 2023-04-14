@@ -2,7 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
-import WhatsApp from "facebook-nodejs-business-sdk";
+const { WhatsApp } = require("facebook-nodejs-business-sdk");
 
 dotenv.config();
 
