@@ -27,58 +27,58 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.post("/webhooks", async (req, res) => {
-  const body = req.body;
-  const values = body.entry[0].changes[0].value;
-  const sender = values.contacts[0];
-  const message = values.messages[0];
+// app.post("/webhooks", async (req, res) => {
+//   const body = req.body;
+//   const values = body.entry[0].changes[0].value;
+//   const sender = values.contacts[0];
+//   const message = values.messages[0];
 
-  console.log(sender);
-  console.log(message);
+//   console.log(sender);
+//   console.log(message);
 
-  if (body.entry[0].changes[0].field !== "messages") {
-    // not from the messages webhook so dont process
-    return res.sendStatus(400);
-  }
+//   if (body.entry[0].changes[0].field !== "messages") {
+//     // not from the messages webhook so dont process
+//     return res.sendStatus(400);
+//   }
 
-  const WhatsApp = new WhatsappCloudAPI({
-    accessToken: "751950662807306|txixsDwdHi4gKgYoKbODvDy4zhs",
-    senderPhoneNumberId: values.metadata.phone_number_id,
-    WABA_ID: body.entry[0].id,
-    graphAPIVersion: "v16.0",
-  });
+//   const WhatsApp = new WhatsappCloudAPI({
+//     accessToken: "751950662807306|txixsDwdHi4gKgYoKbODvDy4zhs",
+//     senderPhoneNumberId: values.metadata.phone_number_id,
+//     WABA_ID: body.entry[0].id,
+//     graphAPIVersion: "v16.0",
+//   });
 
-  try {
-    await WhatsApp.sendText({
-      message: "Hello, World",
-      recipientPhone: sender.wa_id,
-    })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  } catch (error) {
-    console.log("Error occured", error);
-  }
+//   try {
+//     await WhatsApp.sendText({
+//       message: "Hello, World",
+//       recipientPhone: sender.wa_id,
+//     })
+//       .then((result) => {
+//         console.log(result);
+//       })
+//       .catch((error) => {
+//         console.error(error);
+//       });
+//   } catch (error) {
+//     console.log("Error occured", error);
+//   }
 
-  // Your code to handle the incoming message goes here
-  // const senderId = sender.wa_id;
-  // Send a text message back to the user
-  //   client
-  //     .sendMessage(senderId, {
-  //       text: "Hello, World!",
-  //     })
-  // .then((result) => {
-  //   console.log(result);
-  // })
-  // .catch((error) => {
-  //   console.error(error);
-  // });
-});
+//   // Your code to handle the incoming message goes here
+//   // const senderId = sender.wa_id;
+//   // Send a text message back to the user
+//   //   client
+//   //     .sendMessage(senderId, {
+//   //       text: "Hello, World!",
+//   //     })
+//   // .then((result) => {
+//   //   console.log(result);
+//   // })
+//   // .catch((error) => {
+//   //   console.error(error);
+//   // });
+// });
 
-app.post("/webhook", (req, res) => {
+app.get("/webhooks", (req, res) => {
   if (
     req.query["hub.mode"] == "subscribe" &&
     req.query["hub.verify_token"] == "THEFACE"
