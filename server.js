@@ -2,7 +2,8 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
-const { WhatsApp } = require("facebook-nodejs-business-sdk");
+import WhatsApp from "facebook-nodejs-business-sdk";
+import WhatsappCloudAPI from "whatsappcloudapi_wrapper";
 
 dotenv.config();
 
@@ -27,7 +28,7 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.post("/webhooks", (req, res) => {
+app.post("/webhooks", async (req, res) => {
   const body = req.body;
   const values = body.entry[0].changes[0].value;
   const sender = values.contacts[0];
@@ -41,23 +42,31 @@ app.post("/webhooks", (req, res) => {
     return res.sendStatus(400);
   }
 
-  const client = new WhatsApp({
+  const WhatsApp = new WhatsappCloudAPI({
     accessToken: "751950662807306|txixsDwdHi4gKgYoKbODvDy4zhs",
+    senderPhoneNumberId: values.metadata.phone_number_id,
+    WABA_ID: body.entry[0].id,
+    graphAPIVersion: "v14.0",
+  });
+
+  await WhatsApp.sendText({
+    message: "Hello, World",
+    recipientPhone: sender.wa_id,
   });
 
   // Your code to handle the incoming message goes here
-  const senderId = message.id;
+  // const senderId = sender.wa_id;
   // Send a text message back to the user
-  client
-    .sendMessage(senderId, {
-      text: "Hello, World!",
-    })
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  //   client
+  //     .sendMessage(senderId, {
+  //       text: "Hello, World!",
+  //     })
+  //     .then((result) => {
+  //       console.log(result);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
 });
 
 app.post("/webhook", (req, res) => {
