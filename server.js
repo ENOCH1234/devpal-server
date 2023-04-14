@@ -33,6 +33,8 @@ app.post("/webhooks", async (req, res) => {
   const sender = values.contacts[0];
   const message = values.messages[0];
 
+  console.log("See", body.object);
+
   console.log(sender);
   console.log(message);
 
@@ -43,7 +45,7 @@ app.post("/webhooks", async (req, res) => {
 
   const WhatsApp = new WhatsappCloudAPI({
     accessToken: "751950662807306|txixsDwdHi4gKgYoKbODvDy4zhs",
-    senderPhoneNumberId: 115774934767820,
+    senderPhoneNumberId: 103574209336562,
     WABA_ID: body.entry[0].id,
     graphAPIVersion: "v16.0",
   });
