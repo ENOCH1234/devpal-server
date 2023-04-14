@@ -34,7 +34,6 @@ app.post("/webhooks", async (req, res) => {
   const message = values.messages[0];
 
   console.log("See", body.object);
-
   console.log(sender);
   console.log(message);
 
