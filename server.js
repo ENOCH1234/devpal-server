@@ -52,7 +52,13 @@ app.post("/webhooks", async (req, res) => {
     await WhatsApp.sendText({
       message: "Hello, World",
       recipientPhone: sender.wa_id,
-    });
+    })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   } catch (error) {
     console.log("Error occured", error);
   }
@@ -64,12 +70,12 @@ app.post("/webhooks", async (req, res) => {
   //     .sendMessage(senderId, {
   //       text: "Hello, World!",
   //     })
-  //     .then((result) => {
-  //       console.log(result);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
+  // .then((result) => {
+  //   console.log(result);
+  // })
+  // .catch((error) => {
+  //   console.error(error);
+  // });
 });
 
 app.post("/webhook", (req, res) => {
