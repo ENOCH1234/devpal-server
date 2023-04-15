@@ -44,24 +44,29 @@ app.post("/webhooks", async (req, res) => {
 
   const WhatsApp = new WhatsappCloudAPI({
     accessToken: "751950662807306|txixsDwdHi4gKgYoKbODvDy4zhs",
-    senderPhoneNumberId: values.metadata.phone_number_id,
+    senderPhoneNumberId: 109143592105426,
     WABA_ID: body.entry[0].id,
     graphAPIVersion: "v16.0",
   });
 
-  await WhatsApp.sendSimpleButtons({
-    message: `Hey ${sender.profile.name}, \nYou are speaking to a chatbot.\nWhat do you want to do next?`,
+  // sendSimpleButtons({
+  //   message: `Hey ${sender.profile.name}, \nYou are speaking to a chatbot.\nWhat do you want to do next?`,
+  //   recipientPhone: sender.wa_id,
+  //   listOfButtons: [
+  //     {
+  //       title: "Chat The Face",
+  //       id: "see_categories",
+  //     },
+  //     {
+  //       title: "Call ZeekCodes",
+  //       id: "speak_to_human",
+  //     },
+  //   ],
+  // })
+
+  await WhatsApp.sendText({
+    message: "Hello, World",
     recipientPhone: sender.wa_id,
-    listOfButtons: [
-      {
-        title: "Chat The Face",
-        id: "see_categories",
-      },
-      {
-        title: "Call ZeekCodes",
-        id: "speak_to_human",
-      },
-    ],
   })
     .then((result) => {
       console.log(result);
