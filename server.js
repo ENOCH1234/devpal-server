@@ -43,7 +43,8 @@ app.post("/webhooks", async (req, res) => {
   }
 
   const WhatsApp = new WhatsappCloudAPI({
-    accessToken: "751950662807306|txixsDwdHi4gKgYoKbODvDy4zhs",
+    accessToken:
+      "EAAKr5SglLwoBABgfLORmEUV1DRELrKXUNEWXihRwMDKb0edwvX09YnUAK9euGJjG36CwGRtYpYeQlxUAnSZCsxYZCps6SZCnruOLMltqdDZB33kl9cDvcsosflSD4MzKU8APjNaaAFrfIQtNVH1KSfkdh4IwUpP6ZC5wmQ7dDqGNtoaZAgXCwG9muU0r6KR0tEhOhpk5C7qgZDZD",
     senderPhoneNumberId: 109143592105426,
     WABA_ID: body.entry[0].id,
     graphAPIVersion: "v16.0",
