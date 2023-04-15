@@ -50,25 +50,21 @@ app.post("/webhooks", async (req, res) => {
     graphAPIVersion: "v16.0",
   });
 
-  // sendSimpleButtons({
-  //   message: `Hey ${sender.profile.name}, \nYou are speaking to a chatbot.\nWhat do you want to do next?`,
-  //   recipientPhone: sender.wa_id,
-  //   listOfButtons: [
-  //     {
-  //       title: "Chat The Face",
-  //       id: "see_categories",
-  //     },
-  //     {
-  //       title: "Call ZeekCodes",
-  //       id: "speak_to_human",
-  //     },
-  //   ],
-  // })
-
-  await WhatsApp.sendText({
-    message: "Hello, World",
+  await WhatsApp.sendSimpleButtons({
+    message: `Hey *${sender.profile.name}*, your phone number *${sender.wa_id}* has been stored in our database. This message demonstrates your ability to communicate with this bot. A customized response will be put in place soon. \n\n *Love, ZeekCodes*.`,
     recipientPhone: sender.wa_id,
+    listOfButtons: [
+      {
+        title: "Chat The Face",
+        id: "see_categories",
+      },
+      {
+        title: "Call ZeekCodes",
+        id: "speak_to_human",
+      },
+    ],
   })
+
     .then((result) => {
       console.log(result);
     })
