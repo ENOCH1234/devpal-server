@@ -87,27 +87,27 @@ app.post("/webhooks", async (req, res) => {
       console.log("An image received");
   }
 
-  await WhatsApp.sendSimpleButtons({
-    message: `Hey *${sender.profile.name}*, your phone number *${sender.wa_id}* has been stored in our database. This message demonstrates your ability to communicate with this bot. A customized response will be put in place soon. \n\n *Love, ZeekCodes*.`,
-    recipientPhone: sender.wa_id,
-    listOfButtons: [
-      {
-        title: "Chat The Face",
-        id: "see_categories",
-      },
-      {
-        title: "Call ZeekCodes",
-        id: "speak_to_human",
-      },
-    ],
-  })
+  // await WhatsApp.sendSimpleButtons({
+  //   message: `Hey *${sender.profile.name}*, your phone number *${sender.wa_id}* has been stored in our database. This message demonstrates your ability to communicate with this bot. A customized response will be put in place soon. \n\n *Love, ZeekCodes*.`,
+  //   recipientPhone: sender.wa_id,
+  //   listOfButtons: [
+  //     {
+  //       title: "Chat The Face",
+  //       id: "see_categories",
+  //     },
+  //     {
+  //       title: "Call ZeekCodes",
+  //       id: "speak_to_human",
+  //     },
+  //   ],
+  // })
 
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  //   .then((result) => {
+  //     console.log(result);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
 
   // Your code to handle the incoming message goes here
   // const senderId = sender.wa_id;
