@@ -8,7 +8,7 @@ dotenv.config();
 
 const configuration = new Configuration({
   //   apiKey: process.env.OPENAI_API_KEY
-  apiKey: "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",
+  apiKey: "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",
 });
 
 const openai = new OpenAIApi(configuration);
@@ -44,7 +44,7 @@ app.post("/webhooks", async (req, res) => {
 
   const WhatsApp = new WhatsappCloudAPI({
     accessToken:
-      "EAAKr5SglLwoBABgfLORmEUV1DRELrKXUNEWXihRwMDKb0edwvX09YnUAK9euGJjG36CwGRtYpYeQlxUAnSZCsxYZCps6SZCnruOLMltqdDZB33kl9cDvcsosflSD4MzKU8APjNaaAFrfIQtNVH1KSfkdh4IwUpP6ZC5wmQ7dDqGNtoaZAgXCwG9muU0r6KR0tEhOhpk5C7qgZDZD",
+      "EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
     senderPhoneNumberId: 109143592105426,
     WABA_ID: body.entry[0].id,
     graphAPIVersion: "v16.0",
@@ -52,7 +52,31 @@ app.post("/webhooks", async (req, res) => {
 
   switch (message.type) {
     case "text":
-      console.log("A text message received.");
+      try {
+        const prompt = message.text.body;
+        const response = await openai.createCompletion({
+          model: "text-davinci-003",
+          prompt: `${prompt}`,
+          temperature: 1,
+          max_tokens: 3000,
+          top_p: 1,
+          frequency_penalty: 0.5,
+          presence_penalty: 0,
+        });
+
+        await WhatsApp.sendText({
+          message: response.data.choices[0].text,
+          recipientPhone: sender.wa_id,
+        })
+          .then((result) => {
+            console.log(result);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        res.status(500).send({ error });
+      }
       break;
 
     case "audio":
