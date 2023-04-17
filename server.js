@@ -85,6 +85,10 @@ app.post("/webhooks", async (req, res) => {
 
     case "image":
       console.log("An image received");
+      break;
+
+    default:
+      console.log("Nothing received.");
   }
 
   // await WhatsApp.sendSimpleButtons({
