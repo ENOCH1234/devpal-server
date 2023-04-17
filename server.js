@@ -50,6 +50,19 @@ app.post("/webhooks", async (req, res) => {
     graphAPIVersion: "v16.0",
   });
 
+  switch (message.type) {
+    case "text":
+      console.log("A text message received.");
+      break;
+
+    case "audio":
+      console.log("An audio message received.");
+      break;
+
+    case "image":
+      console.log("An image received");
+  }
+
   await WhatsApp.sendSimpleButtons({
     message: `Hey *${sender.profile.name}*, your phone number *${sender.wa_id}* has been stored in our database. This message demonstrates your ability to communicate with this bot. A customized response will be put in place soon. \n\n *Love, ZeekCodes*.`,
     recipientPhone: sender.wa_id,
