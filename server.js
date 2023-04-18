@@ -58,6 +58,7 @@ const getImage = async (link) => {
     .request(config)
     .then((response) => {
       const image = JSON.stringify(response.data);
+      console.log("Image gotten, what shall we do?");
       console.log(image);
       return image;
     })
@@ -136,9 +137,13 @@ app.post("/webhooks", async (req, res) => {
 
         const realImage = await getImage(imageLink.url);
 
-        const getText = await Tesseract.recognize(realImage, "eng", {
-          logger: (m) => console.log(m),
-        }).then(({ data: { text } }) => {
+        const getText = await Tesseract.recognize(
+          "https://tesseract.projectnaptha.com/img/eng_bw.png",
+          "eng",
+          {
+            logger: (m) => console.log(m),
+          }
+        ).then(({ data: { text } }) => {
           return text;
         });
 
