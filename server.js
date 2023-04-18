@@ -35,7 +35,11 @@ const getImageURL = async (image) => {
   };
   axios
     .request(config)
-    .then((response) => JSON.stringify(response.data))
+    .then((response) => {
+      const url = JSON.stringify(response.data);
+      console.log(url);
+      return url;
+    })
     .catch((error) => console.log(error));
 };
 
@@ -52,7 +56,11 @@ const getImage = async (link) => {
 
   axios
     .request(config)
-    .then((response) => JSON.stringify(response.data))
+    .then((response) => {
+      const image = JSON.stringify(response.data);
+      console.log(image);
+      return image;
+    })
     .catch((error) => console.log(error));
 };
 
