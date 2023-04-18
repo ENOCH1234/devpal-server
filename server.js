@@ -81,7 +81,7 @@ app.post("/webhooks", async (req, res) => {
     accessToken:
       "EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
     senderPhoneNumberId: 109143592105426,
-    WABA_ID: body.entry[0].id,
+    WABA_ID: 103574209336562,
     graphAPIVersion: "v16.0",
   });
 
