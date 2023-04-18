@@ -33,7 +33,7 @@ const getImageURL = async (image) => {
         "Bearer EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
     },
   };
-  axios
+  await axios
     .request(config)
     .then((response) => {
       const url = JSON.stringify(response.data);
@@ -47,18 +47,18 @@ const getImage = async (link) => {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: link,
+    url: `${link}`,
     headers: {
       Authorization:
         "Bearer EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
     },
   };
 
-  axios
+  await axios
     .request(config)
     .then((response) => {
-      const image = JSON.stringify(response.data);
       console.log("Image gotten, what shall we do?");
+      const image = JSON.stringify(response.data);
       console.log(image);
       return image;
     })
