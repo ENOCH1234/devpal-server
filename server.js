@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
@@ -21,6 +21,20 @@ app.use(
   })
 );
 app.use(express.json());
+
+const getImageURL = async (image) => {
+  await fetch(`https://graph.facebook.com/v16.0/${image.id}/`, {
+    headers: {
+      Authorization:
+        "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => console.log(error));
+};
 
 app.get("/", async (req, res) => {
   res.status(200).send({
@@ -85,28 +99,23 @@ app.post("/webhooks", async (req, res) => {
       break;
 
     case "image":
-      fetch(`https://graph.facebook.com/v16.0/${message.image.id}/`, {
-        headers: {
-          Authorization:
-            "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
-        },
+      const imageLink = await getImageURL(message.image);
+
+      const getText = await Tesseract.recognize(imageLink.url, "eng", {
+        logger: (m) => console.log(m),
+      }).then(({ data: { text } }) => {
+        return text;
+      });
+
+      await WhatsApp.sendText({
+        message: getText,
+        recipientPhone: sender.wa_id,
       })
-        .then((response) => response.json())
-        .then((data) => {
-          Tesseract.recognize(data.url, "eng", {
-            logger: (m) => console.log(m),
-          }).then(({ data: { text } }) => {
-            WhatsApp.sendText({
-              message: text,
-              recipientPhone: sender.wa_id,
-            })
-              .then((result) => {
-                console.log(result);
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          });
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => {
+          console.error(error);
         });
 
       break;
@@ -114,42 +123,6 @@ app.post("/webhooks", async (req, res) => {
     default:
       console.log("Nothing received.");
   }
-
-  // await WhatsApp.sendSimpleButtons({
-  //   message: `Hey *${sender.profile.name}*, your phone number *${sender.wa_id}* has been stored in our database. This message demonstrates your ability to communicate with this bot. A customized response will be put in place soon. \n\n *Love, ZeekCodes*.`,
-  //   recipientPhone: sender.wa_id,
-  //   listOfButtons: [
-  //     {
-  //       title: "Chat The Face",
-  //       id: "see_categories",
-  //     },
-  //     {
-  //       title: "Call ZeekCodes",
-  //       id: "speak_to_human",
-  //     },
-  //   ],
-  // })
-
-  //   .then((result) => {
-  //     console.log(result);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
-
-  // Your code to handle the incoming message goes here
-  // const senderId = sender.wa_id;
-  // Send a text message back to the user
-  //   client
-  //     .sendMessage(senderId, {
-  //       text: "Hello, World!",
-  //     })
-  // .then((result) => {
-  //   console.log(result);
-  // })
-  // .catch((error) => {
-  //   console.error(error);
-  // });
 });
 
 app.post("/webhook", (req, res) => {
