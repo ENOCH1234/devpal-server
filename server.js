@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
 import WhatsappCloudAPI from "whatsappcloudapi_wrapper";
+import Tesseract from "tesseract.js";
 
 dotenv.config();
 
@@ -85,6 +86,32 @@ app.post("/webhooks", async (req, res) => {
 
     case "image":
       console.log("An image received");
+      fetch("https://graph.facebook.com/v16.0/497810682418627/", {
+        headers: {
+          Authorization:
+            "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          Tesseract.recognize(
+            "https://tesseract.projectnaptha.com/img/eng_bw.png",
+            "eng",
+            { logger: (m) => console.log(m) }
+          ).then(({ data: { text } }) => {
+            WhatsApp.sendText({
+              message: text,
+              recipientPhone: sender.wa_id,
+            })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          });
+        });
+
       break;
 
     default:
