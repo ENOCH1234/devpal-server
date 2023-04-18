@@ -4,7 +4,7 @@ import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
 import WhatsappCloudAPI from "whatsappcloudapi_wrapper";
 import Tesseract from "tesseract.js";
-import axios from "axios";
+import fetch from "node-fetch";
 
 dotenv.config();
 
@@ -24,16 +24,12 @@ app.use(
 app.use(express.json());
 
 const getImageURL = async (image) => {
-  await axios
-    .get(
-      `https://graph.facebook.com/v16.0/${image.id}/`,
-      (config = {
-        headers: {
-          Authorization:
-            "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
-        },
-      })
-    )
+  await fetch(`https://graph.facebook.com/v16.0/${image.id}/`, {
+    headers: {
+      Authorization:
+        "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       return data;
@@ -106,15 +102,12 @@ app.post("/webhooks", async (req, res) => {
     case "image":
       const imageLink = await getImageURL(message.image);
 
-      const realImage = await axios.get(
-        imageLink.url,
-        (config = {
-          headers: {
-            Authorization:
-              "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
-          },
-        })
-      );
+      const realImage = await fetch(imageLink.url, {
+        headers: {
+          Authorization:
+            "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
+        },
+      });
 
       const getText = await Tesseract.recognize(realImage, "eng", {
         logger: (m) => console.log(m),
