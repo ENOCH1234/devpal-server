@@ -113,27 +113,30 @@ app.post("/webhooks", async (req, res) => {
       break;
 
     case "image":
-      const imageLink = await getImageURL(message.image);
+      try {
+        const imageLink = await getImageURL(message.image);
 
-      const realImage = await getImage(imageLink.url);
+        const realImage = await getImage(imageLink.url);
 
-      const getText = await Tesseract.recognize(realImage, "eng", {
-        logger: (m) => console.log(m),
-      }).then(({ data: { text } }) => {
-        return text;
-      });
-
-      await WhatsApp.sendText({
-        message: getText,
-        recipientPhone: sender.wa_id,
-      })
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((error) => {
-          console.error(error);
+        const getText = await Tesseract.recognize(realImage, "eng", {
+          logger: (m) => console.log(m),
+        }).then(({ data: { text } }) => {
+          return text;
         });
 
+        await WhatsApp.sendText({
+          message: getText,
+          recipientPhone: sender.wa_id,
+        })
+          .then((result) => {
+            console.log(result);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        res.status(500).send({ error });
+      }
       break;
 
     default:
