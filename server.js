@@ -99,11 +99,22 @@ app.post("/webhooks", async (req, res) => {
       break;
 
     case "image":
-      const imageLink = await getImageURL(message.image);
+      // const imageLink = await getImageURL(message.image);
 
-      const getText = await Tesseract.recognize(imageLink.url, "eng", {
-        logger: (m) => console.log(m),
-      }).then(({ data: { text } }) => {
+      // const realImage = await fetch(imageLink.url, {
+      //   headers: {
+      //     Authorization:
+      //       "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
+      //   },
+      // });
+
+      const getText = await Tesseract.recognize(
+        "https://tesseract.projectnaptha.com/img/eng_bw.png",
+        "eng",
+        {
+          logger: (m) => console.log(m),
+        }
+      ).then(({ data: { text } }) => {
         return text;
       });
 
