@@ -37,6 +37,15 @@ const getImageURL = async (image) => {
     .catch((error) => console.log(error));
 };
 
+const getImage = async (link) => {
+  await fetch(link, {
+    headers: {
+      Authorization:
+        "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
+    },
+  }).then((response) => console.log(response));
+};
+
 app.get("/", async (req, res) => {
   res.status(200).send({
     message: "Hello from DevsPal",
@@ -65,6 +74,10 @@ app.post("/webhooks", async (req, res) => {
     WABA_ID: body.entry[0].id,
     graphAPIVersion: "v16.0",
   });
+
+  // res.status(200).send({
+  //
+  // });
 
   switch (message.type) {
     case "text":
@@ -102,12 +115,7 @@ app.post("/webhooks", async (req, res) => {
     case "image":
       const imageLink = await getImageURL(message.image);
 
-      const realImage = await fetch(imageLink.url, {
-        headers: {
-          Authorization:
-            "Bearer EAAKr5SglLwoBACEv8SZAm6Be9KVCogFqZCePHAuYZBgeoOXige6Y9ezZAXxRwP18ZBPDdnZCiEEqSAXDZC4sDp6hMmYCckm7GjnYSyh7pNclsw9KaGgu1UpR5deS9XkE1OAwJaHTlQG45qee43I27HPeNGZArJGaRqVapMz5bAmFxZBAYMxn3lbjJykYFBjC66k7FM87ZA7WjFYAZDZD",
-        },
-      });
+      const realImage = await getImage(imageLink.url);
 
       const getText = await Tesseract.recognize(realImage, "eng", {
         logger: (m) => console.log(m),
