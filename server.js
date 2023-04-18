@@ -4,7 +4,7 @@ import cors from "cors";
 import { Configuration, OpenAIApi } from "openai";
 import WhatsappCloudAPI from "whatsappcloudapi_wrapper";
 import Tesseract from "tesseract.js";
-import fetch from "node-fetch";
+import axios from "axios";
 
 dotenv.config();
 
