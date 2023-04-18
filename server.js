@@ -136,7 +136,7 @@ app.post("/webhooks", async (req, res) => {
         const imageLink = await getImageURL(message.image);
 
         const realImage = await getImage(imageLink.url);
-
+        console.log(realImage);
         const getText = await Tesseract.recognize(
           "https://tesseract.projectnaptha.com/img/eng_bw.png",
           "eng",
