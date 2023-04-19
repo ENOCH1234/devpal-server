@@ -125,11 +125,8 @@ app.post("/webhooks", async (req, res) => {
 
     case "audio":
       try {
-        const audioFilePath = await getImageURL(message.image);
-        const audioFile = fs.writeFileSync(
-          "C:UsersThe FaceDownloads",
-          audioFilePath
-        );
+        const audioFilePath = await getImageURL(message.audio);
+        const audioFile = fs.writeFileSync("Downloads", audioFilePath);
         console.log("Audio", audioFile);
         const transcriptionOptions = {
           model: "whisper-1",
