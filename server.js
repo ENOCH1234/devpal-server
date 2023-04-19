@@ -97,7 +97,7 @@ const transcribeAudio = async (audioFilePath) => {
   const transcriptionOptions = {
     model: "whisper-1",
   };
-
+  console.log("AudioPath", audioFilePath);
   const transcript = await openai.audio.transcribe(
     transcriptionOptions,
     audioFilePath
