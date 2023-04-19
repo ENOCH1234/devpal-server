@@ -35,11 +35,8 @@ const getImageURL = async (image) => {
   };
   await axios
     .request(config)
-    .then((response) => {
-      const url = response.data;
-      console.log(url);
-      return url;
-    })
+    .then((response) => response.json())
+    .then((data) => getImage(data.url))
     .catch((error) => console.log(error));
 };
 
@@ -56,12 +53,8 @@ const getImage = async (link) => {
 
   await axios
     .request(config)
-    .then((response) => response.data.blob())
-    .then((blob) => {
-      const imageURL = URL.createObjectURL(blob);
-      console.log("Blob URL", imageURL);
-      return imageURL;
-    })
+    .then((response) => response.json())
+    .then((data) => data.blob())
     .catch((error) => console.log(error));
 };
 
@@ -135,9 +128,10 @@ app.post("/webhooks", async (req, res) => {
       try {
         const imageLink = await getImageURL(message.image);
 
-        const realImage = await getImage(imageLink.url);
+        const imageSource = URL.createObjectURL(imageLink);
+        console.log("Blob URL", imageSource);
 
-        const getText = await Tesseract.recognize(realImage, "eng", {
+        const getText = await Tesseract.recognize(imageSource, "eng", {
           logger: (m) => console.log(m),
         }).then(({ data: { text } }) => {
           return text;
