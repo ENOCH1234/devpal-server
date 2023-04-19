@@ -53,7 +53,7 @@ const getImage = async (link) => {
 
   await axios
     .request(config)
-    .then((response) => response.data.blob())
+    .then((response) => response.blob())
     // .then((data) => )
     .catch((error) => console.log(error));
 };
