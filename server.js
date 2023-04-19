@@ -51,9 +51,10 @@ const getImage = async (link) => {
     },
   };
 
-  await axios
-    .request(config, { responseType: "blob" })
-    .then((response) => URL.createObjectURL(response.data));
+  await axios.request(config, { responseType: "blob" }).then((response) => {
+    console.log(response);
+    URL.createObjectURL(response);
+  });
   // .then((response) => URL.createObjectURL(response.data))
   // // .then((data) => )
   // .catch((error) => console.log(error));
