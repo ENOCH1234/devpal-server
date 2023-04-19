@@ -157,6 +157,7 @@ app.post("/webhooks", async (req, res) => {
     case "audio":
       try {
         const audioFilePath = await getAudioURL(message.audio);
+        console.log("Path", audioFilePath);
         const audioFile = fs.writeFileSync("C:\\", audioFilePath);
         console.log("Audio", audioFile);
         const transcriptionOptions = {
