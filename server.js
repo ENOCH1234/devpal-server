@@ -172,10 +172,7 @@ app.post("/webhooks", async (req, res) => {
       (async () => {
         try {
           const audioUrl = await getAudioURL(message.audio);
-          const audioFilePath = await downloadAudio(
-            audioUrl,
-            "Downloads/audio.mp3"
-          );
+          const audioFilePath = await downloadAudio(audioUrl, "audio.mp3");
           const transcript = await transcribeAudio(audioFilePath);
           console.log(transcript);
         } catch (error) {
