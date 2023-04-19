@@ -5,6 +5,8 @@ import { Configuration, OpenAIApi } from "openai";
 import WhatsappCloudAPI from "whatsappcloudapi_wrapper";
 import Tesseract from "tesseract.js";
 import axios from "axios";
+// import openai from 'openai';
+import fs from "fs";
 
 dotenv.config();
 
@@ -122,6 +124,28 @@ app.post("/webhooks", async (req, res) => {
       break;
 
     case "audio":
+      try {
+        const audioFilePath = await getImageURL(message.image);
+        const audioFile = fs.writeFileSync(
+          "C:UsersThe FaceDownloads",
+          audioFilePath
+        );
+        console.log("Audio", audioFile);
+        const transcriptionOptions = {
+          model: "whisper-1",
+        };
+
+        openai.audio
+          .transcribe(transcriptionOptions, audioFile)
+          .then((transcript) => {
+            console.log(transcript);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } catch (error) {
+        res.status(500).send({ error });
+      }
       console.log("An audio message received.");
       break;
 
