@@ -52,8 +52,8 @@ const getImage = async (link) => {
   };
 
   await axios
-    .request(config)
-    .then((response) => response.blob())
+    .request(config, { responseType: "blob" })
+    .then((response) => URL.createObjectURL(response.data))
     // .then((data) => )
     .catch((error) => console.log(error));
 };
@@ -128,10 +128,10 @@ app.post("/webhooks", async (req, res) => {
       try {
         const imageLink = await getImageURL(message.image);
 
-        const imageSource = URL.createObjectURL(imageLink);
-        console.log("Blob URL", imageSource);
+        // const imageSource = URL.createObjectURL(imageLink);
+        console.log("Blob URL", imageLink);
 
-        const getText = await Tesseract.recognize(imageSource, "eng", {
+        const getText = await Tesseract.recognize(imageLink, "eng", {
           logger: (m) => console.log(m),
         }).then(({ data: { text } }) => {
           return text;
