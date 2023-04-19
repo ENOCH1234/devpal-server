@@ -33,14 +33,9 @@ const getImageURL = async (image) => {
         "Bearer EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
     },
   };
-  await axios
-    .request(config)
-    .then((response) => {
-      const getImageNow = getImage(response.data.url);
-      return getImageNow;
-    })
-    // .then((data) => )
-    .catch((error) => console.log(error));
+  const response = await axios.request(config);
+  const getImageNow = await getImage(response.data.url);
+  return getImageNow;
 };
 
 const getImage = async (link) => {
@@ -52,22 +47,16 @@ const getImage = async (link) => {
       Authorization:
         "Bearer EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
     },
+    responseType: "arraybuffer",
   };
 
-  await axios
-    .request(config, { responseType: "arraybuffer" })
-    .then((response) => {
-      const buffer = Buffer.from(response.data);
-      const uint8Array = new Uint8Array(buffer);
-      console.log("*Array", uint8Array);
-      const arrayBuffer = buffer.buffer;
-      console.log("Array Buffer", arrayBuffer);
-      return uint8Array;
-      // use the binary data in the desired format
-    });
-  // .then((response) => URL.createObjectURL(response.data))
-  // // .then((data) => )
-  // .catch((error) => console.log(error));
+  const response = await axios.request(config);
+  const buffer = Buffer.from(response.data);
+  const uint8Array = new Uint8Array(buffer);
+  console.log("Array", uint8Array);
+  const arrayBuffer = buffer.buffer;
+  console.log("Array Buffer", arrayBuffer);
+  return uint8Array;
 };
 
 app.get("/", async (req, res) => {
