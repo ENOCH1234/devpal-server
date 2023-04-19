@@ -36,7 +36,7 @@ const getImageURL = async (image) => {
   await axios
     .request(config)
     .then((response) => {
-      const url = JSON.stringify(response.data);
+      const url = response.data;
       console.log(url);
       return url;
     })
