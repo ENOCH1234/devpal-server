@@ -52,8 +52,14 @@ const getImage = async (link) => {
   };
 
   await axios
-    .request(config, { responseType: "blob" })
-    .then((response) => URL.createObjectURL(response.data));
+    .request(config, { responseType: "arraybuffer" })
+    .then((response) => {
+      const buffer = Buffer.from(response.data);
+      const uint8Array = new Uint8Array(buffer);
+      // const arrayBuffer = buffer.buffer;
+      return uint8Array;
+      // use the binary data in the desired format
+    });
   // .then((response) => URL.createObjectURL(response.data))
   // // .then((data) => )
   // .catch((error) => console.log(error));
