@@ -62,34 +62,48 @@ const getImage = async (link) => {
 };
 
 const getAudioURL = async (audio) => {
-  let config = {
-    method: "get",
-    maxBodyLength: Infinity,
-    url: `https://graph.facebook.com/v16.0/${audio.id}/`,
-    headers: {
-      Authorization:
-        "Bearer EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
-    },
-  };
-  const response = await axios.request(config);
-  const getImageNow = await getAudio(response.data.url);
-  return getImageNow;
+  const response = await axios.get(
+    `https://graph.facebook.com/v16.0/${audio.id}/`,
+    {
+      headers: {
+        Authorization:
+          "Bearer EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
+      },
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity,
+    }
+  );
+
+  return response.data.url;
 };
 
-const getAudio = async (link) => {
-  let config = {
-    method: "get",
-    maxBodyLength: Infinity,
-    url: `${link}`,
+const downloadAudio = async (url, outputPath) => {
+  const response = await axios.get(url, {
     headers: {
       Authorization:
         "Bearer EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
     },
+    responseType: "arraybuffer",
+    maxContentLength: Infinity,
+    maxBodyLength: Infinity,
+  });
+
+  fs.writeFileSync(outputPath, response.data);
+
+  return outputPath;
+};
+
+const transcribeAudio = async (audioFilePath) => {
+  const transcriptionOptions = {
+    model: "whisper-1",
   };
 
-  const response = await axios.request(config);
+  const transcript = await openai.audio.transcribe(
+    transcriptionOptions,
+    audioFilePath
+  );
 
-  return response;
+  return transcript;
 };
 
 app.get("/", async (req, res) => {
@@ -155,26 +169,39 @@ app.post("/webhooks", async (req, res) => {
       break;
 
     case "audio":
-      try {
-        const audioFilePath = await getAudioURL(message.audio);
-        console.log("Path", audioFilePath);
-        const audioFile = fs.writeFileSync("C:\\", audioFilePath);
-        console.log("Audio", audioFile);
-        const transcriptionOptions = {
-          model: "whisper-1",
-        };
+      (async () => {
+        try {
+          const audioUrl = await getAudioURL(message.audio);
+          const audioFilePath = await downloadAudio(
+            audioUrl,
+            "Downloads/audio.mp3"
+          );
+          const transcript = await transcribeAudio(audioFilePath);
+          console.log(transcript);
+        } catch (error) {
+          console.error(error);
+        }
+      })();
+      // try {
+      //   const audioFilePath = await getAudioURL(message.audio);
+      //   console.log("Path", audioFilePath);
+      //   const audioFile = fs.writeFileSync("C:\\", audioFilePath);
+      //   console.log("Audio", audioFile);
+      //   const transcriptionOptions = {
+      //     model: "whisper-1",
+      //   };
 
-        openai.audio
-          .transcribe(transcriptionOptions, audioFile)
-          .then((transcript) => {
-            console.log(transcript);
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      } catch (error) {
-        res.status(500).send({ error });
-      }
+      //   openai.audio
+      //     .transcribe(transcriptionOptions, audioFile)
+      //     .then((transcript) => {
+      //       console.log(transcript);
+      //     })
+      //     .catch((err) => {
+      //       console.error(err);
+      //     });
+      // } catch (error) {
+      //   res.status(500).send({ error });
+      // }
       console.log("An audio message received.");
       break;
 
