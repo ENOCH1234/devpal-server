@@ -35,7 +35,10 @@ const getImageURL = async (image) => {
   };
   await axios
     .request(config)
-    .then((response) => getImage(response.data.url))
+    .then((response) => {
+      const getImageNow = getImage(response.data.url);
+      return getImageNow;
+    })
     // .then((data) => )
     .catch((error) => console.log(error));
 };
