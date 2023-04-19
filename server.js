@@ -35,9 +35,7 @@ const getImageURL = async (image) => {
   };
   await axios
     .request(config)
-    .then((response) => {
-      return response.data.url;
-    })
+    .then((response) => getImage(response.data.url))
     // .then((data) => )
     .catch((error) => console.log(error));
 };
@@ -58,7 +56,9 @@ const getImage = async (link) => {
     .then((response) => {
       const buffer = Buffer.from(response.data);
       const uint8Array = new Uint8Array(buffer);
-      // const arrayBuffer = buffer.buffer;
+      console.log("*Array", uint8Array);
+      const arrayBuffer = buffer.buffer;
+      console.log("Array Buffer", arrayBuffer);
       return uint8Array;
       // use the binary data in the desired format
     });
@@ -137,10 +137,10 @@ app.post("/webhooks", async (req, res) => {
       try {
         const imageLink = await getImageURL(message.image);
 
-        const imageSource = await getImage(imageLink);
-        console.log("Blob URL", imageSource);
+        // const imageSource = URL.createObjectURL(imageLink);
+        console.log("Blob URL", imageLink);
 
-        const getText = await Tesseract.recognize(imageSource, "eng", {
+        const getText = await Tesseract.recognize(imageLink, "eng", {
           logger: (m) => console.log(m),
         }).then(({ data: { text } }) => {
           return text;
