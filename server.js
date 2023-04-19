@@ -153,7 +153,18 @@ app.post("/webhooks", async (req, res) => {
         res.status(500).send({ error });
       }
       break;
-
+    case "video":
+      await WhatsApp.sendText({
+        message: "Video handling coimg soon...",
+        recipientPhone: sender.wa_id,
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      break;
     default:
       console.log("Nothing received.");
   }
