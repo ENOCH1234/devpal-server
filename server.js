@@ -61,6 +61,37 @@ const getImage = async (link) => {
   return uint8Array;
 };
 
+const getAudioURL = async (audio) => {
+  let config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `https://graph.facebook.com/v16.0/${audio.id}/`,
+    headers: {
+      Authorization:
+        "Bearer EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
+    },
+  };
+  const response = await axios.request(config);
+  const getImageNow = await getAudio(response.data.url);
+  return getImageNow;
+};
+
+const getAudio = async (link) => {
+  let config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${link}`,
+    headers: {
+      Authorization:
+        "Bearer EAAKr5SglLwoBAKGJ86M9TMYnpO3ejC7OPqw3Iz6sMESo1pkllMe7Q6E0xzl4aZAvE4bKZAOhyqQVacL8HLdf2NNnZAdcmZBDM2D1z6P1vrAJCJP9SyvC5rkaZC0ABzha4OcuTGldtkLxfcAfBTnl5oWECTZAB9ZCCdC8FRpoNLQ8Y4hXZBjJppg1hTBzepaZCQohBIg5R4xXCcgZDZD",
+    },
+  };
+
+  const response = await axios.request(config);
+
+  return response;
+};
+
 app.get("/", async (req, res) => {
   res.status(200).send({
     message: "Hello from DevsPal",
@@ -125,7 +156,7 @@ app.post("/webhooks", async (req, res) => {
 
     case "audio":
       try {
-        const audioFilePath = await getImageURL(message.audio);
+        const audioFilePath = await getAudioURL(message.audio);
         const audioFile = fs.writeFileSync("Downloads", audioFilePath);
         console.log("Audio", audioFile);
         const transcriptionOptions = {
