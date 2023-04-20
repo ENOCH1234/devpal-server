@@ -108,9 +108,9 @@ const convertAudio = (inputPath, outputPath, format) => {
 };
 
 const getTranscript = (config) => {
-  return axios(config)
+  axios(config)
     .then((response) => {
-      response;
+      return response;
     })
     .catch((error) => {
       console.error(error);
