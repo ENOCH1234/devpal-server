@@ -107,7 +107,7 @@ const convertAudio = (inputPath, outputPath, format) => {
   });
 };
 
-const getTranscript = (config) => {
+const getTranscript = async (config) => {
   axios(config)
     .then((response) => {
       return response;
@@ -222,7 +222,18 @@ app.post("/webhooks", async (req, res) => {
             data: formData,
           };
 
-          const transcript = getTranscript(config);
+          const transcript = await getTranscript(config);
+
+          await WhatsApp.sendText({
+            message: transcript.text,
+            recipientPhone: sender.wa_id,
+          })
+            .then((result) => {
+              console.log(result);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
 
           console.log(transcript.text);
         } catch (error) {
