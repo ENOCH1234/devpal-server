@@ -200,6 +200,8 @@ app.post("/webhooks", async (req, res) => {
               console.log(error);
               console.log("ERROR DATA", error.data);
               console.log("ERROR message", error.message);
+              console.log("ERROR response", error.response);
+              console.log("ERROR request", error.request);
             });
           // console.log(transcript);
         } catch (error) {
