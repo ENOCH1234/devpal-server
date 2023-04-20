@@ -107,6 +107,17 @@ const convertAudio = (inputPath, outputPath, format) => {
   });
 };
 
+const getTranscript = (config) => {
+  return axios(config)
+    .then((response) => {
+      response;
+    })
+    .catch((error) => {
+      console.error(error);
+      console.error("Response", error.response);
+    });
+};
+
 // const transcribeAudio = async (audioFilePath) => {
 //   const transcriptionOptions = {
 //     model: "whisper-1",
@@ -211,14 +222,8 @@ app.post("/webhooks", async (req, res) => {
             data: formData,
           };
 
-          const transcript = await axios(config)
-            .then((response) => {
-              return response;
-            })
-            .catch((error) => {
-              console.error(error);
-              console.error("Response", error.response);
-            });
+          const transcript = getTranscript(config);
+
           console.log(transcript.text);
         } catch (error) {
           console.error(error);
