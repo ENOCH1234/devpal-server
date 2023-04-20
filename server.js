@@ -225,7 +225,7 @@ app.post("/webhooks", async (req, res) => {
           const transcript = await getTranscript(config);
 
           await WhatsApp.sendText({
-            message: transcript.text,
+            message: transcript.data.text,
             recipientPhone: sender.wa_id,
           })
             .then((result) => {
