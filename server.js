@@ -7,6 +7,7 @@ import Tesseract from "tesseract.js";
 import axios from "axios";
 import FormData from "form-data";
 import fs from "fs";
+import { exec } from "child_process";
 
 dotenv.config();
 
@@ -93,6 +94,19 @@ const downloadAudio = async (url, outputPath) => {
   return outputPath;
 };
 
+const convertAudio = (inputPath, outputPath, format) => {
+  return new Promise((resolve, reject) => {
+    const command = `ffmpeg -i ${inputPath} -vn -ar 44100 -ac 2 -ab 192k -f ${format} ${outputPath}`;
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(outputPath);
+      }
+    });
+  });
+};
+
 // const transcribeAudio = async (audioFilePath) => {
 //   const transcriptionOptions = {
 //     model: "whisper-1",
@@ -172,14 +186,19 @@ app.post("/webhooks", async (req, res) => {
       (async () => {
         try {
           const audioUrl = await getAudioURL(message.audio);
-          const audioFilePath = await downloadAudio(audioUrl, "audio.mp3");
+          const audioFilePath = await downloadAudio(audioUrl, "audio.ogg");
+          const audioFilePathConverted = await convertAudio(
+            audioFilePath,
+            "audio.mp3",
+            "mp3"
+          );
 
           const token = "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";
-          // const file = audioFilePath;
+          const file = audioFilePathConverted;
           const model = "whisper-1";
 
           const formData = new FormData();
-          formData.append("file", fs.createReadStream(audioFilePath));
+          formData.append("file", fs.createReadStream(file));
           formData.append("model", model);
 
           const config = {
@@ -197,16 +216,11 @@ app.post("/webhooks", async (req, res) => {
               console.log(response.data);
             })
             .catch((error) => {
-              console.log(error);
-              console.log("ERROR DATA", error.data);
-              console.log("ERROR message", error.message);
-              console.log("ERROR response", error.response);
-              console.log("ERROR request", error.request);
+              console.error(error);
+              console.error("Response", error.response);
             });
-          // console.log(transcript);
         } catch (error) {
           console.error(error);
-          console.error("Error message", error.message);
         }
       })();
       // try {
