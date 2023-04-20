@@ -5,7 +5,7 @@ import { Configuration, OpenAIApi } from "openai";
 import WhatsappCloudAPI from "whatsappcloudapi_wrapper";
 import Tesseract from "tesseract.js";
 import axios from "axios";
-// import openai from 'openai';
+import FormData from "form-data";
 import fs from "fs";
 
 dotenv.config();
@@ -93,18 +93,18 @@ const downloadAudio = async (url, outputPath) => {
   return outputPath;
 };
 
-const transcribeAudio = async (audioFilePath) => {
-  const transcriptionOptions = {
-    model: "whisper-1",
-  };
-  console.log("AudioPath here", audioFilePath);
-  const transcript = await openai.audio.transcribe(
-    transcriptionOptions,
-    audioFilePath
-  );
+// const transcribeAudio = async (audioFilePath) => {
+//   const transcriptionOptions = {
+//     model: "whisper-1",
+//   };
+//   console.log("AudioPath here", audioFilePath);
+//   const transcript = await openai.audio.transcribe(
+//     transcriptionOptions,
+//     audioFilePath
+//   );
 
-  return transcript;
-};
+//   return transcript;
+// };
 
 app.get("/", async (req, res) => {
   res.status(200).send({
@@ -173,7 +173,32 @@ app.post("/webhooks", async (req, res) => {
         try {
           const audioUrl = await getAudioURL(message.audio);
           const audioFilePath = await downloadAudio(audioUrl, "audio.mp3");
-          const transcript = await transcribeAudio(audioFilePath);
+
+          const token = "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";
+          const file = audioFilePath;
+          const model = "whisper-1";
+
+          const formData = new FormData();
+          formData.append("file", fs.createReadStream(file));
+          formData.append("model", model);
+
+          const config = {
+            method: "post",
+            url: "https://api.openai.com/v1/audio/transcriptions",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              ...formData.getHeaders(),
+            },
+            data: formData,
+          };
+
+          axios(config)
+            .then((response) => {
+              console.log(response.data);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
           console.log(transcript);
         } catch (error) {
           console.error(error);
