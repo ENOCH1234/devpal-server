@@ -108,14 +108,14 @@ const convertAudio = (inputPath, outputPath, format) => {
 };
 
 const getTranscript = async (config) => {
-  axios(config)
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      console.error(error);
-      console.error("Response", error.response);
-    });
+  try {
+    const response = await axios(config);
+    return response;
+  } catch (error) {
+    console.error(error);
+    console.error("Response", error.response);
+    throw error;
+  }
 };
 
 // const transcribeAudio = async (audioFilePath) => {
@@ -234,8 +234,6 @@ app.post("/webhooks", async (req, res) => {
             .catch((error) => {
               console.error(error);
             });
-
-          console.log(transcript.text);
         } catch (error) {
           console.error(error);
         }
