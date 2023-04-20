@@ -175,11 +175,11 @@ app.post("/webhooks", async (req, res) => {
           const audioFilePath = await downloadAudio(audioUrl, "audio.mp3");
 
           const token = "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";
-          const file = audioFilePath;
+          // const file = audioFilePath;
           const model = "whisper-1";
 
           const formData = new FormData();
-          formData.append("file", fs.createReadStream(file));
+          formData.append("file", fs.createReadStream(audioFilePath));
           formData.append("model", model);
 
           const config = {
@@ -197,11 +197,12 @@ app.post("/webhooks", async (req, res) => {
               console.log(response.data);
             })
             .catch((error) => {
-              console.error(error);
+              console.log(error);
             });
-          console.log(transcript);
+          // console.log(transcript);
         } catch (error) {
           console.error(error);
+          console.error("Error message", error.message);
         }
       })();
       // try {
