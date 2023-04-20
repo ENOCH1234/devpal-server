@@ -211,14 +211,15 @@ app.post("/webhooks", async (req, res) => {
             data: formData,
           };
 
-          axios(config)
+          const transcript = await axios(config)
             .then((response) => {
-              console.log(response.data);
+              return response;
             })
             .catch((error) => {
               console.error(error);
               console.error("Response", error.response);
             });
+          console.log(transcript.text);
         } catch (error) {
           console.error(error);
         }
