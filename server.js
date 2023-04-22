@@ -109,9 +109,9 @@ const convertAudio = (inputPath, outputPath, format) => {
   });
 };
 
-const getVoice = async (client, text) => {
+const getVoice = async (client, input) => {
   // The text to synthesize
-  const text = text;
+  const text = input;
 
   // Construct the request
   const request = {
