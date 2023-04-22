@@ -197,7 +197,7 @@ const getResponse = async (prompt, sender) => {
       return "NO, I doubt other users want me to.";
       break;
     default:
-      const context = Convos.get(currentUser).chat;
+      const context = Convos.get(sender.wa_id).chat;
       try {
         const response = await openai.createCompletion({
           model: "text-davinci-003",
@@ -228,7 +228,7 @@ app.post("/webhooks", async (req, res) => {
   const values = body.entry[0].changes[0].value;
   const sender = values.contacts[0];
   const message = values.messages[0];
-  const currentUser = sender?.wa_id;
+  const currentUser = message.from;
 
   console.log("See", body.entry[0].id);
   console.log("Sender", sender);
