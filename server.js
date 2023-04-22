@@ -63,6 +63,7 @@ const getImage = async (link) => {
   console.log("Array Buffer", arrayBuffer);
   return uint8Array;
 };
+const Convos = new Map();
 
 const getAudioURL = async (audio) => {
   const response = await axios.get(
@@ -196,10 +197,11 @@ const getResponse = async (prompt, sender) => {
       return "NO, I doubt other users want me to.";
       break;
     default:
+      const context = Convos.get(currentUser).chat;
       try {
         const response = await openai.createCompletion({
           model: "text-davinci-003",
-          prompt: `${prompt}`,
+          prompt: `${context.length > 0 ? context : null} ${prompt}`,
           temperature: 1,
           max_tokens: 3000,
           top_p: 1,
@@ -226,6 +228,7 @@ app.post("/webhooks", async (req, res) => {
   const values = body.entry[0].changes[0].value;
   const sender = values.contacts[0];
   const message = values.messages[0];
+  const currentUser = sender.wa_id;
 
   console.log("See", body.entry[0].id);
   console.log(sender);
@@ -244,14 +247,26 @@ app.post("/webhooks", async (req, res) => {
     graphAPIVersion: "v16.0",
   });
 
+  if (!Convos.get(currentUser)) {
+    Convos.set(currentUser, {
+      chat: [],
+    });
+  }
+  //  else {
+  //   Convos.get(currentUser).chat.push(`user: ${message.text.body}`);
+  //   console.log("Session created");
+  // }
+
   const client = new textToSpeech.TextToSpeechClient();
 
   switch (message.type) {
     case "text":
+      Convos.get(currentUser).chat.push(`user: ${message.text.body}`);
       try {
         const prompt = message.text.body;
         const reply = await getResponse(prompt, sender);
-
+        Convos.get(currentUser).chat.push(`bot: ${reply}`);
+        console.log(Convos);
         await WhatsApp.sendText({
           message: reply,
           recipientPhone: sender.wa_id,
@@ -302,16 +317,16 @@ app.post("/webhooks", async (req, res) => {
 
           const speech = await getVoice(client, response);
 
-          // await WhatsApp.sendText({
-          //   message: response,
-          //   recipientPhone: sender.wa_id,
-          // })
-          // .then((result) => {
-          //   console.log(result);
-          // })
-          // .catch((error) => {
-          //   console.error(error);
-          // });
+          await WhatsApp.sendText({
+            message: response,
+            recipientPhone: sender.wa_id,
+          })
+            .then((result) => {
+              console.log(result);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
           await WhatsApp.sendAudio({
             recipientPhone: sender.wa_id,
             caption: `${transcript}`,
