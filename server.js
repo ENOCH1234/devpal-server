@@ -118,8 +118,8 @@ const getTranscript = async (config) => {
   }
 };
 
-const getResponse = async (message, sender) => {
-  switch (message.toLowerCase()) {
+const getResponse = async (prompt, sender) => {
+  switch (prompt.toLowerCase()) {
     case "hello":
       return "Hi, how may I help you?";
       break;
@@ -139,10 +139,10 @@ const getResponse = async (message, sender) => {
       return "I am Jasper - a WhatsApp chatbot programmed by Ezekiel A. Tobiloba";
       break;
     case "what can you do":
-      return "1. Give responses to your text queries.\n2. Transcribe text from audios or voice notes you send and provide responses to them.\n3.Scan images to decode texts and send the texts in them to you.";
+      return "1. Give responses to your text queries.\n2. Transcribe text from audios or voice notes you send and provide responses to them.\n3. Scan images to decode texts and send the texts in them to you.";
       break;
     case "what can you do?":
-      return "1. Give responses to your text queries.\n2. Transcribe text from audios or voice notes you send and provide responses to them.\n3.Scan images to decode texts and send the texts in them to you.";
+      return "1. Give responses to your text queries.\n2. Transcribe text from audios or voice notes you send and provide responses to them.\n3. Scan images to decode texts and send the texts in them to you.";
       break;
     case "what are you?":
       return "A WhatsApp chatbot.";
