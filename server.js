@@ -298,7 +298,7 @@ app.post("/webhooks", async (req, res) => {
 
           const transcript = await getTranscript(config);
 
-          const response = getResponse(transcript.data.text, sender);
+          const response = await getResponse(transcript.data.text, sender);
 
           const speech = await getVoice(client, response);
 
