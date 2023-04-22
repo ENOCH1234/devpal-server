@@ -8,6 +8,8 @@ import axios from "axios";
 import FormData from "form-data";
 import fs from "fs";
 import { exec } from "child_process";
+import textToSpeech from "@google-cloud/text-to-speech";
+import util from "util";
 
 dotenv.config();
 
@@ -105,6 +107,28 @@ const convertAudio = (inputPath, outputPath, format) => {
       }
     });
   });
+};
+
+const getVoice = async (client, text) => {
+  // The text to synthesize
+  const text = text;
+
+  // Construct the request
+  const request = {
+    input: { text: text },
+    // Select the language and SSML voice gender (optional)
+    voice: { languageCode: "en-US", ssmlGender: "NEUTRAL" },
+    // select the type of audio encoding
+    audioConfig: { audioEncoding: "MP3" },
+  };
+
+  // Performs the text-to-speech request
+  const [response] = await client.synthesizeSpeech(request);
+  // Write the binary audio content to a local file
+  const writeFile = util.promisify(fs.writeFile);
+  await writeFile("output.mp3", response.audioContent, "binary");
+  console.log("Audio content written to file: output.mp3");
+  return writeFile;
 };
 
 const getTranscript = async (config) => {
@@ -220,6 +244,8 @@ app.post("/webhooks", async (req, res) => {
     graphAPIVersion: "v16.0",
   });
 
+  const client = new textToSpeech.TextToSpeechClient();
+
   switch (message.type) {
     case "text":
       try {
@@ -272,16 +298,26 @@ app.post("/webhooks", async (req, res) => {
 
           const transcript = await getTranscript(config);
 
-          await WhatsApp.sendText({
-            message: transcript.data.text,
+          const response = getResponse(transcript.data.text, sender);
+
+          const speech = await getVoice(client, response);
+
+          // await WhatsApp.sendText({
+          //   message: response,
+          //   recipientPhone: sender.wa_id,
+          // })
+          //   .then((result) => {
+          //     console.log(result);
+          //   })
+          //   .catch((error) => {
+          //     console.error(error);
+          //   });
+          await WhatsApp.sendAudio({
             recipientPhone: sender.wa_id,
-          })
-            .then((result) => {
-              console.log(result);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+            caption: `${transcript}`,
+            file_path: `${speech}`,
+            file_name: "Jasper Answers",
+          });
         } catch (error) {
           console.error(error);
         }
