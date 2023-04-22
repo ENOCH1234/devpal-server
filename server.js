@@ -132,9 +132,18 @@ const getVoice = async (client, input) => {
   return writeFile;
 };
 
-const getTranscript = async (config) => {
+const getTranscript = async (audioFile) => {
   try {
-    const response = await axios(config);
+    const response = await openai.createTranscription(
+      fs.createReadStream(audioFile),
+      "whisper-1",
+      undefined,
+      "json",
+      1,
+      "en"
+    );
+
+    // const response = await axios(config);
     return response;
   } catch (error) {
     console.error(error);
@@ -293,29 +302,28 @@ app.post("/webhooks", async (req, res) => {
             "mp3"
           );
 
-          const token = "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";
-          const file = audioFilePathConverted;
-          const model = "whisper-1";
+          // const token = "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";
+          // const file = audioFilePathConverted;
+          // const model = "whisper-1";
 
-          const formData = new FormData();
-          formData.append("file", fs.createReadStream(file));
-          formData.append("model", model);
+          // const formData = new FormData();
+          // formData.append("file", fs.createReadStream(file));
+          // formData.append("model", model);
 
-          const config = {
-            method: "post",
-            url: "https://api.openai.com/v1/audio/transcriptions",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              ...formData.getHeaders(),
-            },
-            data: formData,
-          };
+          // const config = {
+          //   method: "post",
+          //   url: "https://api.openai.com/v1/audio/transcriptions",
+          //   headers: {
+          //     Authorization: `Bearer ${token}`,
+          //     ...formData.getHeaders(),
+          //   },
+          //   data: formData,
+          // };
 
-          const transcript = await getTranscript(config);
+          const transcript = await getTranscript(audioFilePathConverted);
+          console.log("Transcription", transcript);
 
           const response = await getResponse(transcript.data.text, sender);
-
-          const speech = await getVoice(client, response);
 
           await WhatsApp.sendText({
             message: response,
@@ -327,6 +335,9 @@ app.post("/webhooks", async (req, res) => {
             .catch((error) => {
               console.error(error);
             });
+
+          const speech = await getVoice(client, response);
+
           await WhatsApp.sendAudio({
             recipientPhone: sender.wa_id,
             caption: `${transcript}`,
