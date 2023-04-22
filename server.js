@@ -306,18 +306,24 @@ app.post("/webhooks", async (req, res) => {
           //   message: response,
           //   recipientPhone: sender.wa_id,
           // })
-          //   .then((result) => {
-          //     console.log(result);
-          //   })
-          //   .catch((error) => {
-          //     console.error(error);
-          //   });
+          // .then((result) => {
+          //   console.log(result);
+          // })
+          // .catch((error) => {
+          //   console.error(error);
+          // });
           await WhatsApp.sendAudio({
             recipientPhone: sender.wa_id,
             caption: `${transcript}`,
             file_path: `${speech}`,
             file_name: "Jasper Answers",
-          });
+          })
+            .then((result) => {
+              console.log(result);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         } catch (error) {
           console.error(error);
         }
