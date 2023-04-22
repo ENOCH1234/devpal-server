@@ -201,7 +201,7 @@ const getResponse = async (prompt, sender) => {
       try {
         const response = await openai.createCompletion({
           model: "text-davinci-003",
-          prompt: `${context.length > 0 ? context : null} \n ${prompt}`,
+          prompt: `${context.length > 0 && context} \n ${prompt}`,
           temperature: 1,
           max_tokens: 3000,
           top_p: 1,
@@ -261,11 +261,11 @@ app.post("/webhooks", async (req, res) => {
 
   switch (message.type) {
     case "text":
-      Convos.get(currentUser).chat.push(`user: ${message.text.body}`);
+      Convos.get(currentUser).chat.push(message.text.body);
       try {
         const prompt = message.text.body;
         const reply = await getResponse(prompt, sender);
-        Convos.get(currentUser).chat.push(`bot: ${reply}`);
+        Convos.get(currentUser).chat.push(reply);
         console.log(Convos);
         await WhatsApp.sendText({
           message: reply,
