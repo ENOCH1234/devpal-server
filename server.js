@@ -33,7 +33,7 @@ const getImageURL = async (image) => {
     url: `https://graph.facebook.com/v16.0/${image.id}/`,
     headers: {
       Authorization:
-        "Bearer EAAKr5SglLwoBAG9XyMniyL7SAtk4XnsB9tZASIhSHWkC8AXAY4D92KkGqATRUhrPq9Jef7MbuGAHFBlMYaPcdUZBnTJuZAl2ZBxobXcNSBxLp9k31PNaj5mqduCQGOJUON14cVtGfvZAxbDyIZBIZCgjX71hxzyth9GSIDe6bi20ehx7DtDXApfsI6mYU8IDqKrFSpRAltw1AZDZD",
+        "Bearer EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
     },
   };
   const response = await axios.request(config);
@@ -48,7 +48,7 @@ const getImage = async (link) => {
     url: `${link}`,
     headers: {
       Authorization:
-        "Bearer EAAKr5SglLwoBAG9XyMniyL7SAtk4XnsB9tZASIhSHWkC8AXAY4D92KkGqATRUhrPq9Jef7MbuGAHFBlMYaPcdUZBnTJuZAl2ZBxobXcNSBxLp9k31PNaj5mqduCQGOJUON14cVtGfvZAxbDyIZBIZCgjX71hxzyth9GSIDe6bi20ehx7DtDXApfsI6mYU8IDqKrFSpRAltw1AZDZD",
+        "Bearer EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
     },
     responseType: "arraybuffer",
   };
@@ -68,7 +68,7 @@ const getAudioURL = async (audio) => {
     {
       headers: {
         Authorization:
-          "Bearer EAAKr5SglLwoBAG9XyMniyL7SAtk4XnsB9tZASIhSHWkC8AXAY4D92KkGqATRUhrPq9Jef7MbuGAHFBlMYaPcdUZBnTJuZAl2ZBxobXcNSBxLp9k31PNaj5mqduCQGOJUON14cVtGfvZAxbDyIZBIZCgjX71hxzyth9GSIDe6bi20ehx7DtDXApfsI6mYU8IDqKrFSpRAltw1AZDZD",
+          "Bearer EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
       },
       maxContentLength: Infinity,
       maxBodyLength: Infinity,
@@ -82,7 +82,7 @@ const downloadAudio = async (url, outputPath) => {
   const response = await axios.get(url, {
     headers: {
       Authorization:
-        "Bearer EAAKr5SglLwoBAG9XyMniyL7SAtk4XnsB9tZASIhSHWkC8AXAY4D92KkGqATRUhrPq9Jef7MbuGAHFBlMYaPcdUZBnTJuZAl2ZBxobXcNSBxLp9k31PNaj5mqduCQGOJUON14cVtGfvZAxbDyIZBIZCgjX71hxzyth9GSIDe6bi20ehx7DtDXApfsI6mYU8IDqKrFSpRAltw1AZDZD",
+        "Bearer EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
     },
     responseType: "arraybuffer",
     maxContentLength: Infinity,
@@ -118,18 +118,78 @@ const getTranscript = async (config) => {
   }
 };
 
-// const transcribeAudio = async (audioFilePath) => {
-//   const transcriptionOptions = {
-//     model: "whisper-1",
-//   };
-//   console.log("AudioPath here", audioFilePath);
-//   const transcript = await openai.audio.transcribe(
-//     transcriptionOptions,
-//     audioFilePath
-//   );
+const getResponse = async (message, sender) => {
+  switch (message.toLowerCase()) {
+    case "hello":
+      return "Hi, how may I help you?";
+      break;
+    case "jasper":
+      return `Hi ${sender.profile.name}, How may I help you?`;
+      break;
+    case "hi jasper":
+      return `Hello ${sender.profile.name}.`;
+      break;
+    case "hi":
+      return "Hello, need my help ?";
+      break;
+    case "who are you":
+      return "I am Jasper - a WhatsApp chatbot programmed by Ezekiel A. Tobiloba";
+      break;
+    case "who are you?":
+      return "I am Jasper - a WhatsApp chatbot programmed by Ezekiel A. Tobiloba";
+      break;
+    case "what can you do":
+      return "1. Give responses to your text queries./n2. Transcribe text from audios or voice notes you send and provide responses to them./n3.Scan images to decode texts and send the texts in them to you.";
+      break;
+    case "what can you do?":
+      return "1. Give responses to your text queries./n2. Transcribe text from audios or voice notes you send and provide responses to them./n3.Scan images to decode texts and send the texts in them to you.";
+      break;
+    case "what are you?":
+      return "A WhatsApp chatbot.";
+      break;
+    case "what are you":
+      return "A WhatsApp chatbot.";
+      break;
+    case "who made you?":
+      return "This chatbot was created by Ezekiel A. Tobiloba - A Frontend Engineer and Mobile App Developer";
+      break;
+    case "who made you":
+      return "This chatbot was created by Ezekiel A. Tobiloba - A Frontend Engineer and Mobile App Developer";
+      break;
+    case "what does jasper mean":
+      return "Only Ezekiel knows but I presume it is a cool name, isn't it?";
+      break;
+    case "what does jasper mean?":
+      return "Only Ezekiel knows but I presume it is a cool name, isn't it?";
+      break;
+    case "stop":
+      return "What should I stop ?";
+      break;
+    case "start":
+      "What should I start ?";
+      break;
+    case "rest":
+      return "NO, I doubt other users want me to.";
+      break;
+    default:
+      try {
+        const response = await openai.createCompletion({
+          model: "text-davinci-003",
+          prompt: `${prompt}`,
+          temperature: 1,
+          max_tokens: 3000,
+          top_p: 1,
+          frequency_penalty: 0.5,
+          presence_penalty: 0,
+        });
+        return response.data.choices[0].text;
+      } catch (error) {
+        console.log(error);
+      }
 
-//   return transcript;
-// };
+      break;
+  }
+};
 
 app.get("/", async (req, res) => {
   res.status(200).send({
@@ -154,32 +214,20 @@ app.post("/webhooks", async (req, res) => {
 
   const WhatsApp = new WhatsappCloudAPI({
     accessToken:
-      "EAAKr5SglLwoBAG9XyMniyL7SAtk4XnsB9tZASIhSHWkC8AXAY4D92KkGqATRUhrPq9Jef7MbuGAHFBlMYaPcdUZBnTJuZAl2ZBxobXcNSBxLp9k31PNaj5mqduCQGOJUON14cVtGfvZAxbDyIZBIZCgjX71hxzyth9GSIDe6bi20ehx7DtDXApfsI6mYU8IDqKrFSpRAltw1AZDZD",
+      "EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
     senderPhoneNumberId: 109143592105426,
     WABA_ID: 103574209336562,
     graphAPIVersion: "v16.0",
   });
 
-  // res.status(200).send({
-  //
-  // });
-
   switch (message.type) {
     case "text":
       try {
         const prompt = message.text.body;
-        const response = await openai.createCompletion({
-          model: "text-davinci-003",
-          prompt: `${prompt}`,
-          temperature: 1,
-          max_tokens: 3000,
-          top_p: 1,
-          frequency_penalty: 0.5,
-          presence_penalty: 0,
-        });
+        const reply = await getResponse(prompt, sender);
 
         await WhatsApp.sendText({
-          message: response.data.choices[0].text,
+          message: reply,
           recipientPhone: sender.wa_id,
         })
           .then((result) => {
@@ -238,27 +286,7 @@ app.post("/webhooks", async (req, res) => {
           console.error(error);
         }
       })();
-      // try {
-      //   const audioFilePath = await getAudioURL(message.audio);
-      //   console.log("Path", audioFilePath);
-      //   const audioFile = fs.writeFileSync("C:\\", audioFilePath);
-      //   console.log("Audio", audioFile);
-      //   const transcriptionOptions = {
-      //     model: "whisper-1",
-      //   };
 
-      //   openai.audio
-      //     .transcribe(transcriptionOptions, audioFile)
-      //     .then((transcript) => {
-      //       console.log(transcript);
-      //     })
-      //     .catch((err) => {
-      //       console.error(err);
-      //     });
-      // } catch (error) {
-      //   res.status(500).send({ error });
-      // }
-      console.log("An audio message received.");
       break;
 
     case "image":
