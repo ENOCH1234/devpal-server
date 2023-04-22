@@ -228,10 +228,10 @@ app.post("/webhooks", async (req, res) => {
   const values = body.entry[0].changes[0].value;
   const sender = values.contacts[0];
   const message = values.messages[0];
-  const currentUser = sender.wa_id;
+  const currentUser = sender?.wa_id;
 
   console.log("See", body.entry[0].id);
-  console.log(sender);
+  console.log("Sender", sender);
   console.log(message);
 
   if (body.entry[0].changes[0].field !== "messages") {
