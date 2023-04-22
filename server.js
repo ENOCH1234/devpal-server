@@ -292,68 +292,66 @@ app.post("/webhooks", async (req, res) => {
       break;
 
     case "audio":
-      (async () => {
-        try {
-          const audioUrl = await getAudioURL(message.audio);
-          const audioFilePath = await downloadAudio(audioUrl, "audio.ogg");
-          const audioFilePathConverted = await convertAudio(
-            audioFilePath,
-            "audio.mp3",
-            "mp3"
-          );
+      try {
+        const audioUrl = await getAudioURL(message.audio);
+        const audioFilePath = await downloadAudio(audioUrl, "audio.ogg");
+        const audioFilePathConverted = await convertAudio(
+          audioFilePath,
+          "audio.mp3",
+          "mp3"
+        );
 
-          // const token = "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";
-          // const file = audioFilePathConverted;
-          // const model = "whisper-1";
+        // const token = "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";
+        // const file = audioFilePathConverted;
+        // const model = "whisper-1";
 
-          // const formData = new FormData();
-          // formData.append("file", fs.createReadStream(file));
-          // formData.append("model", model);
+        // const formData = new FormData();
+        // formData.append("file", fs.createReadStream(file));
+        // formData.append("model", model);
 
-          // const config = {
-          //   method: "post",
-          //   url: "https://api.openai.com/v1/audio/transcriptions",
-          //   headers: {
-          //     Authorization: `Bearer ${token}`,
-          //     ...formData.getHeaders(),
-          //   },
-          //   data: formData,
-          // };
+        // const config = {
+        //   method: "post",
+        //   url: "https://api.openai.com/v1/audio/transcriptions",
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //     ...formData.getHeaders(),
+        //   },
+        //   data: formData,
+        // };
 
-          const transcript = await getTranscript(audioFilePathConverted);
-          console.log("Transcription", transcript);
+        const transcript = await getTranscript(audioFilePathConverted);
+        console.log("Transcription", transcript);
 
-          const response = await getResponse(transcript.data.text, sender);
+        const response = await getResponse(transcript.data.text, sender);
 
-          await WhatsApp.sendText({
-            message: response,
-            recipientPhone: sender.wa_id,
+        await WhatsApp.sendText({
+          message: response,
+          recipientPhone: sender.wa_id,
+        })
+          .then((result) => {
+            console.log(result);
           })
-            .then((result) => {
-              console.log(result);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+          .catch((error) => {
+            console.error(error);
+          });
 
-          const speech = await getVoice(client, response);
+        const speech = await getVoice(client, response);
 
-          await WhatsApp.sendAudio({
-            recipientPhone: sender.wa_id,
-            caption: `${transcript}`,
-            file_path: `${speech}`,
-            file_name: "Jasper Answers",
+        await WhatsApp.sendAudio({
+          recipientPhone: sender.wa_id,
+          caption: `${transcript}`,
+          file_path: `${speech}`,
+          file_name: "Jasper Answers",
+        })
+          .then((result) => {
+            console.log(result);
           })
-            .then((result) => {
-              console.log(result);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        } catch (error) {
-          console.error(error);
-        }
-      })();
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
 
       break;
 
