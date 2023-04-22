@@ -201,7 +201,7 @@ const getResponse = async (prompt, sender) => {
       try {
         const response = await openai.createCompletion({
           model: "text-davinci-003",
-          prompt: `${context.length > 0 ? context : null} ${prompt}`,
+          prompt: `${context.length > 0 ? context : null} \n ${prompt}`,
           temperature: 1,
           max_tokens: 3000,
           top_p: 1,
