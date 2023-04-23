@@ -163,6 +163,9 @@ const getResponse = async (prompt, sender) => {
     case "hi jasper":
       return `Hello ${sender.profile.name}.`;
       break;
+    case "okay":
+      return `Alright ${sender.profile.name}, is there anything else I can help you with.`;
+      break;
     case "hi":
       return "Hello, need my help ?";
       break;
@@ -210,7 +213,7 @@ const getResponse = async (prompt, sender) => {
       try {
         const response = await openai.createCompletion({
           model: "text-davinci-003",
-          prompt: `${context.length > 0 && context} \n ${prompt}`,
+          prompt: `${context.length > 0 && context.join("\n")} \n ${prompt}`,
           temperature: 1,
           max_tokens: 3000,
           top_p: 1,
@@ -274,10 +277,11 @@ app.post("/webhooks", async (req, res) => {
       try {
         const prompt = message.text.body;
         const reply = await getResponse(prompt, sender);
-        Convos.get(currentUser).chat.push(reply);
+        const filteredResponse = response.replace(/^[?:,]/, "");
+        Convos.get(currentUser).chat.push(filteredResponse);
         console.log(Convos);
         await WhatsApp.sendText({
-          message: reply,
+          message: filteredResponse,
           recipientPhone: sender.wa_id,
         })
           .then((result) => {
