@@ -35,7 +35,7 @@ const getImageURL = async (image) => {
     url: `https://graph.facebook.com/v16.0/${image.id}/`,
     headers: {
       Authorization:
-        "Bearer EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
+        "Bearer EAAKr5SglLwoBAM1fZCM9Mi64i1qITymJwpV4zM8xKcyd4D8q4sty2d0zIurBSzP7jI2au4PpHqimgXQhZBZCixikodoNksPHOZAmZAkmB6YNZBftvZCfbZBFOgMOJEgtdEYOsJ0uSeG85Ol9odnZA0GK632Mc79Dik2CbIRYO5KFQf8kD3KZA68ygVkGsq7UYXHEASGyOB8Y6WuwZDZD",
     },
   };
   const response = await axios.request(config);
@@ -50,7 +50,7 @@ const getImage = async (link) => {
     url: `${link}`,
     headers: {
       Authorization:
-        "Bearer EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
+        "Bearer EAAKr5SglLwoBAM1fZCM9Mi64i1qITymJwpV4zM8xKcyd4D8q4sty2d0zIurBSzP7jI2au4PpHqimgXQhZBZCixikodoNksPHOZAmZAkmB6YNZBftvZCfbZBFOgMOJEgtdEYOsJ0uSeG85Ol9odnZA0GK632Mc79Dik2CbIRYO5KFQf8kD3KZA68ygVkGsq7UYXHEASGyOB8Y6WuwZDZD",
     },
     responseType: "arraybuffer",
   };
@@ -71,7 +71,7 @@ const getAudioURL = async (audio) => {
     {
       headers: {
         Authorization:
-          "Bearer EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
+          "Bearer EAAKr5SglLwoBAM1fZCM9Mi64i1qITymJwpV4zM8xKcyd4D8q4sty2d0zIurBSzP7jI2au4PpHqimgXQhZBZCixikodoNksPHOZAmZAkmB6YNZBftvZCfbZBFOgMOJEgtdEYOsJ0uSeG85Ol9odnZA0GK632Mc79Dik2CbIRYO5KFQf8kD3KZA68ygVkGsq7UYXHEASGyOB8Y6WuwZDZD",
       },
       maxContentLength: Infinity,
       maxBodyLength: Infinity,
@@ -85,7 +85,7 @@ const downloadAudio = async (url, outputPath) => {
   const response = await axios.get(url, {
     headers: {
       Authorization:
-        "Bearer EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
+        "Bearer EAAKr5SglLwoBAM1fZCM9Mi64i1qITymJwpV4zM8xKcyd4D8q4sty2d0zIurBSzP7jI2au4PpHqimgXQhZBZCixikodoNksPHOZAmZAkmB6YNZBftvZCfbZBFOgMOJEgtdEYOsJ0uSeG85Ol9odnZA0GK632Mc79Dik2CbIRYO5KFQf8kD3KZA68ygVkGsq7UYXHEASGyOB8Y6WuwZDZD",
     },
     responseType: "arraybuffer",
     maxContentLength: Infinity,
@@ -250,7 +250,7 @@ app.post("/webhooks", async (req, res) => {
 
   const WhatsApp = new WhatsappCloudAPI({
     accessToken:
-      "EAAKr5SglLwoBADsFzzG7jQ75MIKARvhIBjxiXc7UZA8S0PaVGczFpmiXtyDAr17d4IwO5bFi8Nad9i0iYtXZCjpjemv2CX3WT6vbmf32DV5lZBfO2B3iySmRVijcCsRlZC9QU1lcMYfw52k5uuLDdNqyatCYDOfhJ6E3I6OybNY9ntZAFDtrArjkDMQpZCfZB2juYoegfoSXQZDZD",
+      "EAAKr5SglLwoBAM1fZCM9Mi64i1qITymJwpV4zM8xKcyd4D8q4sty2d0zIurBSzP7jI2au4PpHqimgXQhZBZCixikodoNksPHOZAmZAkmB6YNZBftvZCfbZBFOgMOJEgtdEYOsJ0uSeG85Ol9odnZA0GK632Mc79Dik2CbIRYO5KFQf8kD3KZA68ygVkGsq7UYXHEASGyOB8Y6WuwZDZD",
     senderPhoneNumberId: 109143592105426,
     WABA_ID: 103574209336562,
     graphAPIVersion: "v16.0",
