@@ -129,9 +129,10 @@ const getVoice = async (config, input) => {
   // const writeFile = util.promisify(fs.writeFile);
   const response = await axios.request(config);
   console.log("Content Lab response", response);
-  await writeFile("output.mp3", response.audioContent, "binary");
-  console.log("Audio content written to file: output.mp3");
-  return writeFile;
+  fs.writeFileSync("output.mp3", response.data);
+  // await writeFile("output.mp3", response.audioContent, "binary");
+  // console.log("Audio content written to file: output.mp3");
+  return "output.mp3";
 };
 
 const getTranscript = async (audioFile) => {
@@ -356,7 +357,6 @@ app.post("/webhooks", async (req, res) => {
             },
           }),
         };
-        1;
 
         // const speech = await getVoice(client, response);
         const speech = await getVoice(config, response);
