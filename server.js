@@ -238,10 +238,13 @@ const getResponse = async (prompt, sender) => {
       break;
     default:
       const context = Convos.get(sender.wa_id).chat;
+      const sendPrompt = `${
+        context.length > 1 && context.join("\n")
+      } \n ${prompt}`;
       try {
         const response = await openai.createCompletion({
           model: "text-davinci-003",
-          prompt: `${context.length > 0 && context.join("\n")} \n ${prompt}`,
+          prompt: `${sendPrompt}`,
           temperature: 1,
           max_tokens: 3000,
           top_p: 1,
@@ -389,7 +392,7 @@ app.post("/webhooks", async (req, res) => {
         await WhatsApp.sendAudio({
           recipientPhone: sender.wa_id,
           file_path: `${speech}`,
-          file_name: "Jasper Answers",
+          file_name: "Jasper-Speaks",
         })
           .then((result) => {
             console.log(result);
