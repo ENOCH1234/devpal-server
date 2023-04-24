@@ -363,7 +363,6 @@ app.post("/webhooks", async (req, res) => {
 
         await WhatsApp.sendAudio({
           recipientPhone: sender.wa_id,
-          caption: `${transcript}`,
           file_path: `${speech}`,
           file_name: "Jasper Answers",
         })
