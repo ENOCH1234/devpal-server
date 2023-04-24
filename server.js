@@ -302,9 +302,12 @@ app.post("/webhooks", async (req, res) => {
   switch (message.type) {
     case "text":
       Convos.get(currentUser).chat.push(message.text.body);
+      console.log("let's run the process");
       try {
         const prompt = message.text.body;
+        console.log("Prompt", prompt);
         const reply = await getResponse(prompt, sender);
+        console.log("Reply", reply);
         const filteredResponse = reply.replace(/^[?:!.-,]/, "");
         Convos.get(currentUser).chat.push(filteredResponse);
         console.log(Convos);
@@ -319,7 +322,7 @@ app.post("/webhooks", async (req, res) => {
             console.error(error);
           });
       } catch (error) {
-        res.status(500).send({ error });
+        console.log(error);
       }
       break;
 
@@ -427,7 +430,7 @@ app.post("/webhooks", async (req, res) => {
             console.error(error);
           });
       } catch (error) {
-        res.status(500).send({ error });
+        console.log(error);
       }
       break;
     case "video":
