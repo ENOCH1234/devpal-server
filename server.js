@@ -111,22 +111,23 @@ const convertAudio = (inputPath, outputPath, format) => {
 };
 
 const getVoice = async (client, input) => {
-  // The text to synthesize
-  const text = input;
+  // // The text to synthesize
+  // const text = input;
 
-  // Construct the request
-  const request = {
-    input: { text: text },
-    // Select the language and SSML voice gender (optional)
-    voice: { languageCode: "en-US", ssmlGender: "NEUTRAL" },
-    // select the type of audio encoding
-    audioConfig: { audioEncoding: "MP3" },
-  };
+  // // Construct the request
+  // const request = {
+  //   input: { text: text },
+  //   // Select the language and SSML voice gender (optional)
+  //   voice: { languageCode: "en-US", ssmlGender: "NEUTRAL" },
+  //   // select the type of audio encoding
+  //   audioConfig: { audioEncoding: "MP3" },
+  // };
 
-  // Performs the text-to-speech request
-  const [response] = await client.synthesizeSpeech(request);
-  // Write the binary audio content to a local file
-  const writeFile = util.promisify(fs.writeFile);
+  // // Performs the text-to-speech request
+  // const [response] = await client.synthesizeSpeech(request);
+  // // Write the binary audio content to a local file
+  // const writeFile = util.promisify(fs.writeFile);
+  const response = await axios.request(config);
   await writeFile("output.mp3", response.audioContent, "binary");
   console.log("Audio content written to file: output.mp3");
   return writeFile;
@@ -339,7 +340,25 @@ app.post("/webhooks", async (req, res) => {
             console.error(error);
           });
 
-        const speech = await getVoice(client, response);
+        const config = {
+          method: "post",
+          url: "https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB",
+          headers: {
+            "xi-api-key": "5b5c333c8613d0de15887fc95a1fab3d",
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify({
+            text: response,
+            voice_settings: {
+              stability: 0,
+              similarity_boost: 0,
+            },
+          }),
+        };
+        1;
+
+        // const speech = await getVoice(client, response);
+        const speech = await getVoice(config, response);
 
         await WhatsApp.sendAudio({
           recipientPhone: sender.wa_id,
