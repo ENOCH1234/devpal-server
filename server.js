@@ -169,6 +169,22 @@ const getResponse = async (prompt, sender) => {
     case "okay":
       return `Alright ${sender.profile.name}, is there anything else I can help you with.`;
       break;
+    case "what is my name":
+      return `Your name is ${sender.profile.name}, I suppose.`;
+      break;
+    case "what is my name?":
+      return `Your name is ${sender.profile.name}.`;
+      break;
+    case "-memory":
+      Convos.get(sender.wa_id).chat = [];
+      return "";
+      break;
+    case "what is your name":
+      return "Jasper";
+      break;
+    case "what is your name?":
+      return "Jasper";
+      break;
     case "hi":
       return "Hello, need my help ?";
       break;
