@@ -166,6 +166,15 @@ const getResponse = async (prompt, sender) => {
     case "hi jasper":
       return `Hello ${sender.profile.name}.`;
       break;
+    case "hello jasper":
+      return `Hi ${sender.profile.name}.`;
+      break;
+    case "hello askjasper":
+      return `Hi ${sender.profile.name}.`;
+      break;
+    case "hi askjasper":
+      return `Hello ${sender.profile.name}.`;
+      break;
     case "okay":
       return `Alright ${sender.profile.name}, is there anything else I can help you with.`;
       break;
@@ -296,7 +305,7 @@ app.post("/webhooks", async (req, res) => {
       try {
         const prompt = message.text.body;
         const reply = await getResponse(prompt, sender);
-        const filteredResponse = reply.replace(/^[?:,]/, "");
+        const filteredResponse = reply.replace(/^[?:!,]/, "");
         Convos.get(currentUser).chat.push(filteredResponse);
         console.log(Convos);
         await WhatsApp.sendText({
