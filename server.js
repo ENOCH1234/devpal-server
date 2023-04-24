@@ -304,12 +304,10 @@ app.post("/webhooks", async (req, res) => {
   switch (message.type) {
     case "text":
       Convos.get(currentUser).chat.push(message.text.body);
-      console.log("let's run the process");
+
       try {
         const prompt = message.text.body;
-        console.log("Prompt", prompt);
         const reply = await getResponse(prompt, sender);
-        console.log("Reply", reply);
         const filteredResponse = reply.replace(/^[?:!\.\-\,]/, "");
         Convos.get(currentUser).chat.push(filteredResponse);
         console.log(Convos);
@@ -358,11 +356,13 @@ app.post("/webhooks", async (req, res) => {
 
         const transcript = await getTranscript(audioFilePathConverted);
         console.log("Transcription", transcript);
-
+        Convos.get(currentUser).chat.push(transcript.data.text);
         const response = await getResponse(transcript.data.text, sender);
+        const filteredResponse = response.replace(/^[?:!\.\-\,]/, "");
+        Convos.get(currentUser).chat.push(filteredResponse);
 
         await WhatsApp.sendText({
-          message: response,
+          message: filteredResponse,
           recipientPhone: sender.wa_id,
         })
           .then((result) => {
