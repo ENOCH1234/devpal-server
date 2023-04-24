@@ -238,9 +238,10 @@ const getResponse = async (prompt, sender) => {
       break;
     default:
       const context = Convos.get(sender.wa_id).chat;
-      const sendPrompt = `${
-        context.length > 1 && context.join("\n")
-      } \n ${prompt}`;
+      const sendPrompt =
+        context.length > 0 ? `${context.join("\n")} \n ${prompt}` : `${prompt}`;
+      // ${context.length > 0 && context.join("\n")} \n ${prompt}
+
       try {
         const response = await openai.createCompletion({
           model: "text-davinci-003",
