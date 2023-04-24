@@ -110,7 +110,7 @@ const convertAudio = (inputPath, outputPath, format) => {
   });
 };
 
-const getVoice = async (client, input) => {
+const getVoice = async (config, input) => {
   // // The text to synthesize
   // const text = input;
 
