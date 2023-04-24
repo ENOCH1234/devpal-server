@@ -128,6 +128,7 @@ const getVoice = async (client, input) => {
   // // Write the binary audio content to a local file
   // const writeFile = util.promisify(fs.writeFile);
   const response = await axios.request(config);
+  console.log("Content Lab response", response);
   await writeFile("output.mp3", response.audioContent, "binary");
   console.log("Audio content written to file: output.mp3");
   return writeFile;
