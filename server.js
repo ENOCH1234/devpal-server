@@ -308,7 +308,7 @@ app.post("/webhooks", async (req, res) => {
         console.log("Prompt", prompt);
         const reply = await getResponse(prompt, sender);
         console.log("Reply", reply);
-        const filteredResponse = reply.replace(/^[?:!.-,]/, "");
+        const filteredResponse = reply.replace(/^[?:!\.\-\,]/, "");
         Convos.get(currentUser).chat.push(filteredResponse);
         console.log(Convos);
         await WhatsApp.sendText({
