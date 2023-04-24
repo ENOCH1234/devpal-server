@@ -158,10 +158,10 @@ const getTranscript = async (audioFile) => {
 const getResponse = async (prompt, sender) => {
   switch (prompt.toLowerCase()) {
     case "hello":
-      return "Hi, how may I help you?";
+      return "Hi, how can I assist you today?";
       break;
     case "jasper":
-      return `Hi ${sender.profile.name}, How may I help you?`;
+      return `Hi ${sender.profile.name}, How can I assist you today?`;
       break;
     case "hi jasper":
       return `Hello ${sender.profile.name}.`;
@@ -176,7 +176,7 @@ const getResponse = async (prompt, sender) => {
       return `Hello ${sender.profile.name}.`;
       break;
     case "okay":
-      return `Alright ${sender.profile.name}, is there anything else I can help you with.`;
+      return `Alright ${sender.profile.name}, is there anything else I can help you with?`;
       break;
     case "what is my name":
       return `Your name is ${sender.profile.name}, I suppose.`;
@@ -238,10 +238,12 @@ const getResponse = async (prompt, sender) => {
       break;
     default:
       const context = Convos.get(sender.wa_id).chat;
+      const updatedContext =
+        context.length > 0 ? `${context.join("\n")} \n ${prompt}` : `${prompt}`;
       try {
         const response = await openai.createCompletion({
           model: "text-davinci-003",
-          prompt: `${context.length > 0 && context.join("\n")} \n ${prompt}`,
+          prompt: `${updatedContext}`,
           temperature: 1,
           max_tokens: 3000,
           top_p: 1,
