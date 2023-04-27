@@ -10,11 +10,11 @@ import fs from "fs";
 import { exec } from "child_process";
 import textToSpeech from "@google-cloud/text-to-speech";
 import util from "util";
+import https from "https";
 
 dotenv.config();
 
 const configuration = new Configuration({
-  //   apiKey: process.env.OPENAI_API_KEY
   apiKey: "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",
 });
 
@@ -27,6 +27,19 @@ app.use(
   })
 );
 app.use(express.json());
+
+const serverUrl = "https://devspal-server.onrender.com";
+const sendPing = () => {
+  https
+    .get(serverUrl, (res) => {
+      console.log(`Ping sent to ${serverUrl}. Status code: ${res.statusCode}`);
+    })
+    .on("error", (err) => {
+      console.error(`Error sending ping to ${serverUrl}: ${err}`);
+    });
+};
+
+setInterval(sendPing, 600000);
 
 const getImageURL = async (image) => {
   let config = {
@@ -111,27 +124,10 @@ const convertAudio = (inputPath, outputPath, format) => {
 };
 
 const getVoice = async (config, input) => {
-  // // The text to synthesize
-  // const text = input;
-
-  // // Construct the request
-  // const request = {
-  //   input: { text: text },
-  //   // Select the language and SSML voice gender (optional)
-  //   voice: { languageCode: "en-US", ssmlGender: "NEUTRAL" },
-  //   // select the type of audio encoding
-  //   audioConfig: { audioEncoding: "MP3" },
-  // };
-
-  // // Performs the text-to-speech request
-  // const [response] = await client.synthesizeSpeech(request);
-  // // Write the binary audio content to a local file
-  // const writeFile = util.promisify(fs.writeFile);
   const response = await axios.request(config);
   console.log("Content Lab response", response);
   fs.writeFileSync("output.mp3", response.data);
-  // await writeFile("output.mp3", response.audioContent, "binary");
-  // console.log("Audio content written to file: output.mp3");
+
   return "output.mp3";
 };
 
@@ -294,10 +290,6 @@ app.post("/webhooks", async (req, res) => {
       chat: [],
     });
   }
-  //  else {
-  //   Convos.get(currentUser).chat.push(`user: ${message.text.body}`);
-  //   console.log("Session created");
-  // }
 
   const client = new textToSpeech.TextToSpeechClient();
 
@@ -336,24 +328,6 @@ app.post("/webhooks", async (req, res) => {
           "mp3"
         );
 
-        // const token = "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";
-        // const file = audioFilePathConverted;
-        // const model = "whisper-1";
-
-        // const formData = new FormData();
-        // formData.append("file", fs.createReadStream(file));
-        // formData.append("model", model);
-
-        // const config = {
-        //   method: "post",
-        //   url: "https://api.openai.com/v1/audio/transcriptions",
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //     ...formData.getHeaders(),
-        //   },
-        //   data: formData,
-        // };
-
         const transcript = await getTranscript(audioFilePathConverted);
         console.log("Transcription", transcript);
         Convos.get(currentUser).chat.push(transcript.data.text);
@@ -387,8 +361,6 @@ app.post("/webhooks", async (req, res) => {
             },
           }),
         };
-
-        // const speech = await getVoice(client, response);
         const speech = await getVoice(config, response);
 
         await WhatsApp.sendAudio({
@@ -411,9 +383,6 @@ app.post("/webhooks", async (req, res) => {
     case "image":
       try {
         const imageLink = await getImageURL(message.image);
-
-        // const imageSource = URL.createObjectURL(imageLink);
-        console.log("Blob URL", imageLink);
 
         const getText = await Tesseract.recognize(imageLink, "eng", {
           logger: (m) => console.log(m),
