@@ -18,7 +18,7 @@
     "whatsappcloudapi_wrapper": "^1.0.13"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "server": "nodemon server"
   },
   "name": "server",
